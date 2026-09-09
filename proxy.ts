@@ -45,13 +45,13 @@ export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
   // Guest demo contains only synthetic fixtures and never initializes authentication.
-  if (pathname === "/demo") return applyNoStore(response);
+  if (pathname === "/demo" || pathname === "/sign-out") return applyNoStore(response);
   // These guest handlers enforce their own session/origin or admin-key checks.
-  const hostedDemoPaths = ["/api/demo/session", "/api/demo/bootstrap", "/api/demo/search", "/api/demo/nudges", "/api/demo/posts", "/api/demo/reset", "/api/demo/index"];
+  const hostedDemoPaths = ["/api/demo/session", "/api/demo/bootstrap", "/api/demo/search", "/api/demo/nudges", "/api/demo/posts", "/api/demo/reset", "/api/demo/index", "/api/demo/presentation-account"];
   if (hostedDemoPaths.includes(pathname)) return applyNoStore(response);
   const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
   const archivedDemo = DEMO_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix.endsWith("/") ? prefix : prefix + "/"));
-  if (guestRelease && request.method === "GET" && (pathname === "/sign-in" || pathname === "/onboarding" || archivedDemo || pathname.startsWith("/leaderboards/") || pathname.startsWith("/p/"))) {
+  if (guestRelease && request.method === "GET" && (pathname === "/onboarding" || archivedDemo || pathname.startsWith("/leaderboards/") || pathname.startsWith("/p/"))) {
     return redirectWithCookies(request, response, "/demo");
   }
   const isPublic =
@@ -103,6 +103,17 @@ export async function proxy(request: NextRequest) {
     if (isPublic || isDemo) return applyNoStore(response);
     if (isApi) return unauthorizedApi();
     return redirectWithCookies(request, response, "/sign-in");
+  }
+
+  // Presentation access has no legacy participant profile. The page re-verifies
+  // the user and presentation entitlement with the authentication provider.
+  if (pathname === "/account") return applyNoStore(response);
+  if (guestRelease && (pathname === "/sign-in" || pathname === "/sign-in/actions")) {
+    // Let POST reach its own origin/credential guard. Only entitled claims redirect
+    // GET, avoiding a redirect loop for other authenticated users.
+    return request.method === "GET" && claimsData?.claims.app_metadata?.presentation_account === true
+      ? redirectWithCookies(request, response, "/account")
+      : applyNoStore(response);
   }
 
   const { data: profile } = await supabase

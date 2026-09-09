@@ -14,13 +14,28 @@ const NO_STORE_HEADERS = {
   Expires: "0",
 };
 
+function publicOrigin(request: Request): string | null {
+  const internal = new URL(request.url);
+  const host = request.headers.get("host") || internal.host;
+  const forwarded = process.env.VERCEL === "1" ? request.headers.get("x-forwarded-proto") : null;
+  const protocol = forwarded === "https" || forwarded === "http" ? `${forwarded}:` : internal.protocol;
+  const expected = `${protocol}//${host}`;
+  try {
+    if (new URL(expected).origin !== expected || request.headers.get("origin") !== expected || request.headers.get("sec-fetch-site") === "cross-site") return null;
+    return expected;
+  } catch { return null; }
+}
+
 function redirectTo(request: Request, path: string, key?: "error" | "message", value?: string) {
-  const destination = new URL(path, request.url);
+  const destination = new URL(path, publicOrigin(request)!);
   if (key && value) destination.searchParams.set(key, value);
   return NextResponse.redirect(destination, { status: 303, headers: NO_STORE_HEADERS });
 }
 
 export async function POST(request: Request) {
+  if (!publicOrigin(request)) {
+    return NextResponse.json({ error: "Same-origin request required." }, { status: 403, headers: NO_STORE_HEADERS });
+  }
   if (!isSupabaseAuthConfigured()) {
     return redirectTo(request, "/sign-in", "error", "Account setup pending. Explore the synthetic demo without an account.");
   }
@@ -36,6 +51,10 @@ export async function POST(request: Request) {
     return redirectTo(request, "/sign-in", "error", "Enter a valid email and password.");
   }
 
+  const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
+  if (guestRelease && parsed.data.intent === "sign-up") {
+    return NextResponse.json({ error: "Demo account creation is unavailable." }, { status: 403, headers: NO_STORE_HEADERS });
+  }
   try {
     const supabase = await createClient();
     const { email, password, intent } = parsed.data;
@@ -53,6 +72,15 @@ export async function POST(request: Request) {
         "error",
         intent === "sign-up" ? "Unable to create that account." : "Email or password was not accepted.",
       );
+    }
+
+    if (guestRelease) {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user || data.user.app_metadata?.presentation_account !== true) {
+        await supabase.auth.signOut();
+        return redirectTo(request, "/sign-in", "error", "Presentation account access is unavailable. Please use the provided demo account.");
+      }
+      return redirectTo(request, "/account");
     }
 
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();

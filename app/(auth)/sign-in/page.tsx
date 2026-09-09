@@ -13,10 +13,11 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const params = await searchParams;
   const error = first(params.error);
   const message = first(params.message);
+  const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
 
   if (!isSupabaseAuthConfigured()) {
     const demoHref = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled"
-      ? "/dashboard"
+      ? "/demo"
       : "/leaderboards/fall-weekly-quest";
     return (
       <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">
@@ -44,11 +45,11 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           LaundroStat
         </Link>
         <p className="mt-8 text-sm font-bold uppercase tracking-[0.16em] text-accent">
-          Participant access
+          {guestRelease ? "Presentation account" : "Participant access"}
         </p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight">Sign in or join</h1>
+        <h1 className="mt-2 text-4xl font-black tracking-tight">{guestRelease ? "Demo account sign in" : "Sign in or join"}</h1>
         <p className="mt-3 leading-7 text-muted">
-          Your hall invite is used during onboarding, after your account is authenticated.
+          {guestRelease ? "Use your provided presentation account. This is a synthetic demo, not a university account. Demo nudges and preset updates are saved to your account; no real students are contacted." : "Your hall invite is used during onboarding, after your account is authenticated."}
         </p>
 
         {error ? (
@@ -90,11 +91,12 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <button className="min-h-12 rounded-full bg-accent px-6 font-bold text-white" name="intent" value="sign-in">
               Sign in
             </button>
-            <button className="min-h-12 rounded-full border border-line bg-white px-6 font-bold" name="intent" value="sign-up">
+            {!guestRelease && <button className="min-h-12 rounded-full border border-line bg-white px-6 font-bold" name="intent" value="sign-up">
               Create account
-            </button>
+            </button>}
           </div>
         </form>
+        {guestRelease && <Link className="mt-6 inline-flex min-h-12 items-center font-bold text-accent" href="/demo">Explore the public demo without signing in</Link>}
       </section>
     </main>
   );

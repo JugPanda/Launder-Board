@@ -9,7 +9,7 @@ vi.mock("@/lib/supabase/server", () => mocks);
 const credentials = { email: "person@example.com", password: "never-log-this-password", intent: "sign-in" };
 function request(intent = "sign-in") {
   return new Request("https://launderboard.vercel.app/sign-in/actions", {
-    method: "POST", body: new URLSearchParams({ ...credentials, intent }),
+    method: "POST", headers: { Origin: "https://launderboard.vercel.app" }, body: new URLSearchParams({ ...credentials, intent }),
   });
 }
 function configured() {
@@ -19,17 +19,67 @@ function configured() {
 function provider(profile: object | null = null) {
   const query = { select: vi.fn(), eq: vi.fn(), is: vi.fn(), not: vi.fn(), maybeSingle: vi.fn().mockResolvedValue({ data: profile, error: null }) };
   for (const method of [query.select, query.eq, query.is, query.not]) method.mockReturnValue(query);
-  return { auth: { signUp: vi.fn().mockResolvedValue({ error: null }), signInWithPassword: vi.fn().mockResolvedValue({ error: null }), getClaims: vi.fn().mockResolvedValue({ data: { claims: { sub: "user-id" } }, error: null }) }, from: vi.fn().mockReturnValue(query) };
+  return { auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-id", app_metadata: { presentation_account: true } } }, error: null }), signOut: vi.fn().mockResolvedValue({ error: null }), signUp: vi.fn().mockResolvedValue({ error: null }), signInWithPassword: vi.fn().mockResolvedValue({ error: null }), getClaims: vi.fn().mockResolvedValue({ data: { claims: { sub: "user-id" } }, error: null }) }, from: vi.fn().mockReturnValue(query) };
 }
-beforeEach(() => { vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", ""); vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", ""); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled"); mocks.createClient.mockReset(); });
+beforeEach(() => { vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", ""); vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", ""); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "disabled"); mocks.createClient.mockReset(); });
 afterEach(() => { cleanup(); vi.unstubAllEnvs(); });
 
 describe("auth configuration boundary", () => {
+  it("uses incoming Host for normalized internal URLs and redirects", async () => {
+    configured(); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled"); vi.stubEnv("VERCEL", "1");
+    mocks.createClient.mockResolvedValue(provider());
+    const response = await POST(new Request("http://localhost:3000/sign-in/actions", { method: "POST", headers: { Host: "public.example.test", Origin: "https://public.example.test", "x-forwarded-proto": "https" }, body: new URLSearchParams(credentials) }));
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("https://public.example.test/account");
+  });
+  it("does not trust forwarded protocol outside Vercel", async () => {
+    configured(); vi.stubEnv("VERCEL", "0");
+    const response = await POST(new Request("http://localhost:3000/sign-in/actions", { method: "POST", headers: { Host: "public.example.test", Origin: "https://public.example.test", "x-forwarded-proto": "https" }, body: new URLSearchParams(credentials) }));
+    expect(response.status).toBe(403); expect(mocks.createClient).not.toHaveBeenCalled();
+  });
+  it("shows only blank demo login fields in guest release", async () => {
+    configured(); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled");
+    render(await SignInPage({ searchParams: Promise.resolve({}) }));
+    expect(screen.getByRole("heading", { name: "Demo account sign in" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Create account" })).toBeNull();
+    expect(screen.getByLabelText("Email")).toHaveValue("");
+    expect(screen.getByLabelText("Password")).toHaveValue("");
+  });
+  it("verifies presentation login without legacy profile SQL", async () => {
+    configured(); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled");
+    const client = provider(); mocks.createClient.mockResolvedValue(client);
+    const response = await POST(request());
+    expect(response.headers.get("location")).toBe("https://launderboard.vercel.app/account");
+    expect(client.auth.getUser).toHaveBeenCalled();
+    expect(client.from).not.toHaveBeenCalled();
+  });
+  it("rejects guest signup before provider calls", async () => {
+    configured(); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled");
+    const response = await POST(request("sign-up"));
+    expect(response.status).toBe(403);
+    expect(mocks.createClient).not.toHaveBeenCalled();
+  });
+  it("signs out non-presentation users without profile SQL", async () => {
+    configured(); vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled");
+    const client = provider(); client.auth.getUser.mockResolvedValue({ data: { user: { id: "user-id", app_metadata: { presentation_account: false } } }, error: null });
+    mocks.createClient.mockResolvedValue(client);
+    const response = await POST(request());
+    expect(response.headers.get("location")).toContain("unavailable");
+    expect(client.auth.signOut).toHaveBeenCalled();
+    expect(client.from).not.toHaveBeenCalled();
+  });
+  it.each([null, "https://attacker.test"])("blocks login with origin %s", async (origin) => {
+    configured(); const req = request();
+    if (origin) req.headers.set("Origin", origin); else req.headers.delete("Origin");
+    expect((await POST(req)).status).toBe(403);
+    expect(mocks.createClient).not.toHaveBeenCalled();
+  });
   it("renders setup pending without collecting credentials", async () => {
+    vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "enabled");
     const { container } = render(await SignInPage({ searchParams: Promise.resolve({}) }));
     expect(screen.getByRole("heading", { name: /account setup pending/i })).toBeVisible();
     expect(container.querySelector("form")).toBeNull();
-    expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute("href", "/dashboard");
+    expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute("href", "/demo");
   });
   it("uses a public demo when private demo routes are disabled", async () => {
     vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "disabled");

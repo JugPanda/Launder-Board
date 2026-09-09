@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createHash } from 'node:crypto';
-const mock = vi.hoisted(() => ({ rows: {} as Record<string, Record<string, unknown>[]>, fail: false, rpc: vi.fn(), queries: [] as { table: string; filters: [string, string, unknown][] }[] }));
+const mock = vi.hoisted(() => ({ accountHash: vi.fn(), provision: vi.fn(), rows: {} as Record<string, Record<string, unknown>[]>, fail: false, rpc: vi.fn(), queries: [] as { table: string; filters: [string, string, unknown][] }[] }));
 vi.mock('@/lib/supabase/admin.server', () => ({ createAdminClient: () => ({
   from(table: string) {
     const filters: [string, string, unknown][] = [];
@@ -15,6 +15,8 @@ vi.mock('@/lib/supabase/admin.server', () => ({ createAdminClient: () => ({
     }; return q;
   }, rpc: mock.rpc,
 }) }));
+vi.mock('@/lib/hosted-guest/account.server', () => ({ presentationSessionHash: mock.accountHash, provisionPresentationAccount: mock.provision }));
+import { handler } from '@/lib/hosted-guest/api.server';
 import { GET as bootstrap } from '@/app/api/demo/bootstrap/route';
 import { POST as session } from '@/app/api/demo/session/route';
 import { GET as search } from '@/app/api/demo/search/route';
@@ -27,6 +29,7 @@ const hash = createHash('sha256').update(token).digest('hex');
 const row = { id: 'U003', display_name: 'Riley', hall: 'Earhart Hall', days_since_wash: 17, tracking_state: 'current', visibility: 'public', reminder_consent: true, synthetic: true, scrub_streak: 0, last_full_cycle_date: '2026-08-22', source_label: 'Simulated CSC-format demo', usual_days: ['Tuesday'], usual_time_window: '17:00–19:00', as_of: '2026-09-08' };
 function request(path: string, body?: unknown, cookie = true, origin = 'https://demo.test') { return new Request(`https://demo.test/api/demo/${path}`, { method: body === undefined ? 'GET' : 'POST', headers: { origin, 'content-type': 'application/json', ...(cookie ? { cookie: `laundrostat_demo=${token}` } : {}) }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); }
 beforeEach(() => {
+ mock.accountHash.mockReset().mockResolvedValue(null); mock.provision.mockReset();
  mock.fail = false; mock.queries = []; mock.rpc.mockReset().mockResolvedValue({ data: { ok: true, code: 'saved' }, error: null });
  mock.rows = { demo_participants: [row], demo_sessions: [{ id: '00000000-0000-4000-8000-000000000001', token_hash: hash, expires_at: '2099-01-01T00:00:00Z' }], demo_nudges: [], demo_posts: [] };
  vi.stubEnv('TYPESENSE_HOST', 'search.test'); vi.stubEnv('TYPESENSE_SEARCH_API_KEY', 'SECRET-search'); vi.stubEnv('TYPESENSE_ADMIN_API_KEY', 'SECRET-admin'); vi.stubEnv('DEMO_INDEX_SECRET', 'test-index-secret');
@@ -51,6 +54,40 @@ function indexProvider(options: { corruptReadback?: boolean; failedImport?: bool
   throw new Error('Unexpected Typesense request');
  }); return { stores, calls };
 }
+describe('presentation account API', () => {
+ it('uses a verified account hash instead of a supplied guest cookie and never exposes it', async () => {
+  const accountHash = 'b'.repeat(64); mock.accountHash.mockResolvedValue(accountHash);
+  mock.rows.demo_sessions.push({id:'00000000-0000-4000-8000-000000000002',token_hash:accountHash,expires_at:'2099-01-01'});
+  mock.rpc.mockResolvedValue({data:'00000000-0000-4000-8000-000000000002',error:null});
+  const r = await session(request('session', {})); expect(r.status).toBe(200);
+  expect(mock.rpc).toHaveBeenCalledWith('demo_open_session',{p_token_hash:accountHash});
+  expect(r.headers.get('set-cookie') || '').not.toContain(accountHash);
+  expect(await r.text()).not.toContain(accountHash);
+  mock.rpc.mockResolvedValue({data:{ok:true,code:'saved'},error:null});
+  await nudge(request('nudges',{recipientId:'U003',preset:'fresh_start'}));
+  expect(mock.rpc).toHaveBeenLastCalledWith('demo_save_nudge',{p_token_hash:accountHash,p_recipient_id:'U003',p_preset:'fresh_start'});
+ });
+ it('reads account events across different guest cookies without leaking the guest events', async () => {
+  const accountHash='b'.repeat(64);mock.accountHash.mockResolvedValue(accountHash);
+  mock.rows.demo_sessions.push({id:'00000000-0000-4000-8000-000000000002',token_hash:accountHash,expires_at:'2099-01-01'});
+  mock.rows.demo_posts=[{id:'account',session_id:'00000000-0000-4000-8000-000000000002',preset:'fresh_start',created_at:'2026-09-09'},{id:'guest',session_id:mock.rows.demo_sessions[0].id,preset:'fresh_start',created_at:'2026-09-09'}];
+  for(const withCookie of [true,false]) expect((await (await bootstrap(request('bootstrap',undefined,withCookie))).json()).posts.map((p:{id:string})=>p.id)).toEqual(['account']);
+ });
+ it('rejects failed authenticated identity without falling back to guest writes', async () => {
+  mock.accountHash.mockRejectedValue(new Error('SECRET auth failure'));
+  const r=await nudge(request('nudges',{recipientId:'U003',preset:'fresh_start'}));
+  expect(r.status).toBe(503);expect(mock.rpc).not.toHaveBeenCalled();expect(await r.text()).not.toContain('SECRET');
+ });
+ it('provisions only behind operator bearer and origin, with strict body', async () => {
+  const provision=handler('presentation-account' as Parameters<typeof handler>[0]);
+  expect((await provision(request('presentation-account',{}))).status).toBe(401);expect(mock.provision).not.toHaveBeenCalled();
+  const make=(origin='https://demo.test',body={})=>new Request('https://demo.test/api/demo/presentation-account',{method:'POST',headers:{authorization:'Bearer test-index-secret',origin,'content-type':'application/json'},body:JSON.stringify(body)});
+  expect((await provision(make('https://evil.test'))).status).toBe(403);
+  expect((await provision(make('https://demo.test',{role:'admin'}))).status).toBe(400);expect(mock.provision).not.toHaveBeenCalled();
+  mock.provision.mockResolvedValue({ok:true,email:'demo.laundrostat@example.com',password:'generated-password'});
+  const r=await provision(make());expect(r.status).toBe(200);expect(mock.provision).toHaveBeenCalledTimes(1);expect(r.headers.get('cache-control')).toContain('no-store');
+ });
+});
 describe('hosted guest route security', () => {
  it('uses the incoming Host boundary when Next normalizes the internal request URL', async () => {
   mock.rpc.mockResolvedValue({ data: '00000000-0000-4000-8000-000000000001', error: null });

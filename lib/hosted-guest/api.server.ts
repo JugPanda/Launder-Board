@@ -3,6 +3,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
 import { bootstrap, DemoError, mutate, openSession, sessionId } from './repository.server';
 import { filtersSchema, indexCollections, searchParticipants } from './search.server';
+import { presentationSessionHash, provisionPresentationAccount } from './account.server';
 const COOKIE = 'laundrostat_demo';
 const MAX_BODY = 1024;
 const empty = z.object({}).strict();
@@ -46,11 +47,11 @@ function parse<T>(schema: z.ZodType<T>, value: unknown): T {
   if (!result.success) throw new DemoError(400, 'invalid_request');
   return result.data;
 }
-type Action = 'bootstrap' | 'session' | 'search' | 'nudges' | 'posts' | 'reset' | 'index';
+type Action = 'bootstrap' | 'session' | 'search' | 'nudges' | 'posts' | 'reset' | 'index' | 'presentation-account';
 export function handler(action: Action) {
   return async (request: Request): Promise<Response> => {
     try {
-      if (action === 'index') {
+      if (action === 'index' || action === 'presentation-account') {
         const secret = process.env.DEMO_INDEX_SECRET;
         const authorization = request.headers.get('authorization') || '';
         const supplied = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
@@ -58,11 +59,13 @@ export function handler(action: Action) {
         // Bearer-only operational endpoint, never cookie-authorized.
         origin(request);
         parse(empty, await body(request));
-        return json(await indexCollections());
+        return json(action === 'index' ? await indexCollections() : await provisionPresentationAccount());
       }
       if (action === 'session' || action === 'nudges' || action === 'posts' || action === 'reset') origin(request);
       const token = cookieToken(request);
-      if (action === 'bootstrap') return json(await bootstrap(token ? digest(token) : undefined));
+      const accountHash = action === 'search' ? null : await presentationSessionHash(request);
+      const ownerHash = accountHash ?? (token ? digest(token) : undefined);
+      if (action === 'bootstrap') return json(await bootstrap(ownerHash));
       if (action === 'search') {
         const values: Record<string, string> = Object.create(null);
         for (const [key, value] of new URL(request.url).searchParams) {
@@ -74,6 +77,10 @@ export function handler(action: Action) {
       const input = await body(request);
       if (action === 'session') {
         parse(empty, input);
+        if (accountHash) {
+          await openSession(accountHash);
+          return json(await bootstrap(accountHash), 200, cookie('', true));
+        }
         // Random cookie values only: session IDs never cross the boundary.
         const existing = token ? await sessionId(digest(token)) : null;
         const nextToken = existing && token ? token : randomBytes(32).toString('hex');
@@ -81,8 +88,8 @@ export function handler(action: Action) {
         return json(await bootstrap(digest(nextToken)), 200, cookie(nextToken));
       }
       const payload = action === 'nudges' ? parse(nudgeSchema, input) : action === 'posts' ? parse(postSchema, input) : parse(empty, input);
-      if (!token) throw new DemoError(401, 'invalid_session');
-      const result = await mutate(digest(token), action, 'recipientId' in payload ? payload.recipientId as string : undefined);
+      if (!ownerHash) throw new DemoError(401, 'invalid_session');
+      const result = await mutate(ownerHash, action, 'recipientId' in payload ? payload.recipientId as string : undefined);
       return json(result, 200, action === 'reset' ? cookie('', true) : undefined);
     } catch (error) {
       // Provider errors, Zod diagnostics and credentials never reach clients or logs.

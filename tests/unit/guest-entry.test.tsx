@@ -18,7 +18,10 @@ it('keeps guest access independent of providers and private APIs protected', asy
   const guest = await proxy(new NextRequest('https://example.com/demo'));
   expect(guest.status).toBe(200);
   expect(guest.headers.get('location')).toBeNull();
-  for (const path of ['/sign-in', '/dashboard', '/friends', '/activity/new', '/leaderboards/fall-weekly-quest']) {
+  const login = await proxy(new NextRequest('https://example.com/sign-in'));
+  expect(login.status).toBe(200);
+  expect(login.headers.get('location')).toBeNull();
+  for (const path of ['/dashboard', '/friends', '/activity/new', '/leaderboards/fall-weekly-quest']) {
     const old = await proxy(new NextRequest('https://example.com' + path));
     expect(old.headers.get('location')).toBe('https://example.com/demo');
   }
