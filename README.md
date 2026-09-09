@@ -2,7 +2,7 @@
 
 A sign-in-free, synthetic laundry social demo for Purdue University West Lafayette: **Clean-O-Meter, consenting-friend search, Wash Mate matching, Squeaky Squad / Stinky Squad, and Dorm Wars**.
 
-**Live:** https://launderboard.vercel.app · **Demo:** https://launderboard.vercel.app/demo
+**Live:** https://laundrostat.vercel.app · **Demo:** https://laundrostat.vercel.app/demo
 
 > Every participant, activity, score, schedule, relationship, and hall standing is synthetic. Real hall names do not make the standings Purdue data. No live CSC/payment, machine-code, weight, removal-time, photo-proof, or refund/error verification exists.
 
@@ -33,7 +33,7 @@ npm ci
 LAUNDER_BOARD_DEMO_MODE=enabled npm run dev
 ```
 
-Open `/demo`. The deployment flag redirects earlier demo/sign-in entry points to the current guest experience. `/demo` itself works without provider configuration. Do not put real participant data in the guest interface.
+Open `/demo`. The deployment flag keeps the current synthetic guest experience public while preserving the optional presentation-account sign-in. The hosted experience requires its configured Supabase and Typesense services and fails visibly rather than substituting bundled participant results. Visitors do not need provider credentials. Do not put real participant data in the guest interface.
 
 ## Verification
 
@@ -47,9 +47,9 @@ npm run test:e2e
 
 ## Backend status
 
-Next.js 16, React 19, TypeScript, Tailwind, Vitest, and Playwright power the current guest demo. Supabase/PostgreSQL/RLS and Typesense integrations exist in the legacy backend, but the guest simulation does not claim to use live provider data. The legacy weekly scoring schema is not the current user-facing game. No database migration is needed for this guest release.
+Next.js 16, React 19, TypeScript, Tailwind, Vitest, and Playwright power the current guest demo. The hosted synthetic experience reads eligible participant fixtures and isolated session/account events through Supabase/PostgreSQL and searches them through Typesense Cloud; every search result is revalidated against current Supabase consent, visibility, and tracking state. These are real provider-backed synthetic workflows, not real student or CSC data. The legacy weekly scoring schema is not the current user-facing game.
 
-[Supabase setup](docs/supabase-setup.md) is retained for later real-user work, not a requirement for tonight's demo. Do not seed or reset a hosted production database. Real-user wiring for the current model must be implemented and tested before launch to residents.
+[Hosted guest setup](docs/hosted-guest-setup.md) documents the deployed synthetic schema and search index. [Supabase setup](docs/supabase-setup.md) covers deferred real-user authentication. Do not seed or reset the hosted production database. Real-student wiring and any CSC integration must be separately authorized, implemented, and tested before a resident pilot.
 
 ## Delivery
 

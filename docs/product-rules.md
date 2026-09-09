@@ -8,12 +8,12 @@ Current source brief: https://docs.google.com/document/d/17KNrH98GEM0szQTWxbTPI2
 
 ## Guest experience
 
-- `/demo` is accessible without sign-in, Supabase, or Typesense.
+- `/demo` is accessible without sign-in. The deployed synthetic experience uses Supabase and Typesense and shows an explicit unavailable state rather than fabricated fallback data if either service fails.
 - Show Clean-O-Meter, last recorded completed cycle, days since wash, scrub streak, and source credibility.
 - Search a consenting synthetic friend group by name, residence hall, and days without a recorded completed wash.
 - Match Wash Mates by overlapping usual laundry days and time windows. These are synthetic coarse schedules, not observed location data.
 - Show the playful Squeaky Squad / Stinky Squad user board and Dorm Wars hall averages using recency/consistency, never load count or weekly credits.
-- Community updates and proof concepts are browser-only simulations. No messages or photographs are uploaded to a provider.
+- Preset community updates and nudges are synthetic simulations saved to an isolated Supabase-backed browser session or presentation account. They are not globally published and no real person receives a message. Selected proof images remain local previews and are not uploaded.
 - The exact Clean-O-Meter formula and invented streak/schedule examples must be labeled as demonstration assumptions, not clinically meaningful hygiene measurements.
 - Unknown or incomplete tracking is not ranked or treated as due.
 - Hall denominators represent the disclosed synthetic participating sample, never official building population. Real Purdue names plus synthetic scores retain persistent disclosure.
@@ -28,6 +28,6 @@ The public Purdue housing directory is separately sourced metadata. It is not an
 
 ## Security boundary and legacy code
 
-The existing authenticated APIs, PostgreSQL RLS, and provider adapters remain protected and are not used by the guest simulator. No auth bypass is added to private APIs. The earlier weekly scoring backend is retained as legacy code only; **it is not the current demo product**. With the public demo deployment enabled, older demo and sign-in GET routes redirect to `/demo` rather than exposing contradictory weekly-cap screens.
+The hosted guest API uses a standalone synthetic schema with server-only Supabase access, RLS/privilege restrictions, opaque hashed session capabilities, and Typesense search followed by Supabase consent revalidation. The optional presentation account binds its synthetic events to a verified Auth identity. Existing real-user APIs remain protected; no auth bypass is added to private APIs. The earlier weekly scoring backend is retained as legacy code only; **it is not the current demo product**.
 
-Real-user authentication, backend persistence for the new model, approved provider integration, and production-ready photo validation are deferred. Do not onboard real residents into this guest demonstration.
+General real-user onboarding, approved CSC integration, and production-ready photo validation are deferred. The presentation account is a restricted showcase identity, not resident onboarding. Do not put real students or real laundry activity into this synthetic demonstration.

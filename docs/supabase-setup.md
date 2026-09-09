@@ -1,10 +1,10 @@
 # Secure hosted Supabase setup
 
-> **Deferred for the current guest release.** `/demo` needs no Supabase or sign-in. With the showcase flag enabled, `/sign-in` redirects to `/demo`. The instructions below describe retained authentication infrastructure for later real-user work, not tonight's demo.
+> **General resident authentication remains deferred.** The current `/demo` uses the separate Supabase-backed synthetic schema documented in [hosted guest setup](hosted-guest-setup.md), and the optional restricted presentation account uses Supabase Auth. The instructions below describe the broader participant-authentication infrastructure required before onboarding real residents.
 
 ## What this enables—and what it does not
 
-A deployment with only `LAUNDER_BOARD_DEMO_MODE=enabled` has no hosted authentication. `/sign-in` deliberately shows **Account setup pending**, not a credential form. Its demo link does not create an account. Missing or invalid public Supabase configuration makes POST `/sign-in/actions` redirect safely (303, private/no-store) before initializing the provider. Provider failures return generic errors; they are not successful authentication.
+With `LAUNDER_BOARD_DEMO_MODE=enabled`, `/demo` remains public and `/sign-in` accepts only an operator-provisioned presentation account when authentication is configured; self-service signup is not offered in this mode. Without valid public Supabase configuration, `/sign-in` deliberately shows **Account setup pending** instead of credential fields. Missing configuration makes POST `/sign-in/actions` redirect safely (303, private/no-store) before initializing the provider. Provider failures return generic errors; they are not successful authentication.
 
 **Adding Supabase does NOT finish real UI wiring.** The existing dashboard, friends, and privacy screens are browser demos using synthetic fixtures/local state. Their controls are not proof of persisted account data or enforced sharing preferences. Auth and onboarding/server APIs exist, but the product still needs real authenticated UI integration and end-to-end privacy verification before onboarding real participants. Do not enter real participant data into demo controls. Typesense Cloud is a separate service, not included with Supabase.
 
@@ -16,7 +16,7 @@ A deployment with only `LAUNDER_BOARD_DEMO_MODE=enabled` has no hosted authentic
 
 ## 2. Add the exact Vercel variables
 
-Open Vercel project **`jugpandaco/launderboard` → Settings → Environment Variables**. Set these explicitly for Production; use a separate Supabase project and separate values for Preview/Development:
+Open Vercel project **`jugpandaco/laundrostat` → Settings → Environment Variables**. Set these explicitly for Production; use a separate Supabase project and separate values for Preview/Development:
 
 | Variable | Value | Exposure |
 | --- | --- | --- |
@@ -56,8 +56,8 @@ In Supabase **Authentication → Providers → Email**, enable email/password si
 
 In **Authentication → URL Configuration**:
 
-- Confirm the actual production domain in Vercel Settings → Domains. For a deployment served at `https://launderboard.vercel.app`, set **Site URL** to **`https://launderboard.vercel.app/sign-in`**. If the assigned/custom domain differs, use that exact HTTPS origin plus `/sign-in` instead.
-- Set the redirect allowlist to the exact **`https://launderboard.vercel.app/sign-in`** destination (or the exact confirmed custom-domain equivalent), not `https://**.vercel.app/**` or a wildcard.
+- Confirm the actual production domain in Vercel Settings → Domains. For the current deployment at `https://laundrostat.vercel.app`, set **Site URL** to **`https://laundrostat.vercel.app/sign-in`**. If the assigned/custom domain changes, use that exact HTTPS origin plus `/sign-in` instead.
+- Set the redirect allowlist to the exact **`https://laundrostat.vercel.app/sign-in`** destination (or the exact confirmed custom-domain equivalent), not `https://**.vercel.app/**` or a wildcard.
 - For a separate development Supabase project, use Site URL **`http://localhost:3000/sign-in`** and allowlist **`http://localhost:3000/sign-in`**. Add **`http://127.0.0.1:3000/sign-in`** only if actually used. For a preview project, use its exact stable preview HTTPS origin plus `/sign-in`; remove obsolete preview URLs.
 
 The current `signUp({ email, password })` call does not supply `emailRedirectTo`, so Supabase's Site URL is the confirmation return destination. Keep Supabase's default confirmation template using `{{ .ConfirmationURL }}`: it verifies email at Supabase, then returns the user to sign in with their password. There is **no implemented `/auth/callback` or `/auth/confirm` route** in this app; do not copy a token-hash/PKCE callback template expecting either route. This flow does not promise automatic login from the email link. A server callback and corresponding allowlist/template changes are separate work if automatic email-link sessions are desired.
