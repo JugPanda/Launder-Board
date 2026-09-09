@@ -1,0 +1,261 @@
+[
+  {
+    "officialName": "Cary Quadrangle",
+    "slug": "cary-quadrangle",
+    "aliases": [
+      "Cary Quad",
+      "Cary"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/cary-quad.html"
+  },
+  {
+    "officialName": "Earhart Hall",
+    "slug": "earhart-hall",
+    "aliases": [
+      "Earhart"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/earhart.html"
+  },
+  {
+    "officialName": "First Street Towers",
+    "slug": "first-street-towers",
+    "aliases": [
+      "FST",
+      "First Street"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": "included_in_rate",
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/first-street.html"
+  },
+  {
+    "officialName": "Winifred Parker Hall",
+    "slug": "winifred-parker-hall",
+    "aliases": [
+      "Winifred Parker",
+      "Parker South"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/parker-south.html"
+  },
+  {
+    "officialName": "Frieda Parker Hall",
+    "slug": "frieda-parker-hall",
+    "aliases": [
+      "Frieda Parker",
+      "Parker North"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/parker-north.html"
+  },
+  {
+    "officialName": "Harrison Hall",
+    "slug": "harrison-hall",
+    "aliases": [
+      "Harrison"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/harrison.html"
+  },
+  {
+    "officialName": "Hawkins Hall",
+    "slug": "hawkins-hall",
+    "aliases": [
+      "Hawkins"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/hawkins.html"
+  },
+  {
+    "officialName": "Hillenbrand Hall",
+    "slug": "hillenbrand-hall",
+    "aliases": [
+      "Hillenbrand"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/hillenbrand.html"
+  },
+  {
+    "officialName": "Honors College and Residences",
+    "slug": "honors-college-and-residences",
+    "aliases": [
+      "Honors College",
+      "Honors Residences"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/honors-college.html"
+  },
+  {
+    "officialName": "McCutcheon Hall",
+    "slug": "mccutcheon-hall",
+    "aliases": [
+      "McCutcheon",
+      "McCutchen"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/mccutcheon.html"
+  },
+  {
+    "officialName": "Meredith Hall",
+    "slug": "meredith-hall",
+    "aliases": [
+      "Meredith"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/meredith.html"
+  },
+  {
+    "officialName": "Meredith South",
+    "slug": "meredith-south",
+    "aliases": [
+      "Meredith South"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/meredith-south.html"
+  },
+  {
+    "officialName": "Owen Hall",
+    "slug": "owen-hall",
+    "aliases": [
+      "Owen"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/owen.html"
+  },
+  {
+    "officialName": "Shreve Hall",
+    "slug": "shreve-hall",
+    "aliases": [
+      "Shreve"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/shreve.html"
+  },
+  {
+    "officialName": "South Hall",
+    "slug": "south-hall",
+    "aliases": [
+      "South"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/south-hall.html"
+  },
+  {
+    "officialName": "Tarkington Hall",
+    "slug": "tarkington-hall",
+    "aliases": [
+      "Tark",
+      "Tarkington"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/tarkington.html"
+  },
+  {
+    "officialName": "Wiley Hall",
+    "slug": "wiley-hall",
+    "aliases": [
+      "Wiley"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/wiley.html"
+  },
+  {
+    "officialName": "Windsor Halls",
+    "slug": "windsor-halls",
+    "aliases": [
+      "Windsor"
+    ],
+    "campus": "west-lafayette",
+    "housingType": "residence_hall",
+    "active": true,
+    "term": "fall-2026",
+    "laundryPaymentCategory": null,
+    "verifiedAt": "2026-09-09",
+    "sourceUrl": "https://www.housing.purdue.edu/my-housing/options/residence-halls/windsor.html"
+  }
+]

@@ -1,5 +1,11 @@
 # Launder Board
 
+Purdue University West Lafayette-focused student hackathon project. Not affiliated with or endorsed by Purdue or University Residences.
+
+- [Purdue housing scope and source review](docs/purdue-context.md)
+- [Hosted Supabase setup and sign-in troubleshooting](docs/supabase-setup.md)
+- `/purdue/halls` contains real housing metadata only; demo standings remain fictional.
+
 A privacy-first, mobile-friendly residence-hall laundry challenge built for a short hackathon. Participants voluntarily record laundry activity, encourage consenting friends, and help their hall through one normalized weekly participation credit.
 
 > **Demo data:** Every included person, hall, invite, and activity record is synthetic. The MVP does not claim a live CSC integration or university partnership.
@@ -18,7 +24,7 @@ A privacy-first, mobile-friendly residence-hall laundry challenge built for a sh
 
 - One fictional campus with Maple, River, and Oak halls.
 - Eighteen synthetic participants, six per hall.
-- Monday-to-Monday competition weeks in `America/New_York`.
+- Monday-to-Monday competition weeks in `America/Indiana/Indianapolis`.
 - Minimum five-person eligible roster for public ranking.
 - Seventy-two-hour late-import window.
 - At most two credited participants on an accepted shared session.

@@ -22,7 +22,7 @@ describe("deterministic synthetic demo seed contract", () => {
 
   it("seeds one active competition, two fixed New York weeks, and 18 locked current enrollments", () => {
     expect(seed).toContain("Synthetic Laundry League");
-    expect(seed).toContain("America/New_York");
+    expect(seed).toContain("America/Indiana/Indianapolis");
     expect(seed).toContain("'2026-09-07'::date");
     expect(seed).toContain("'2026-09-14'::date");
     expect(seed).toContain("generate_series(201, 218)");

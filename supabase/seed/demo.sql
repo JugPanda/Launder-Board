@@ -97,7 +97,7 @@ insert into public.competitions (
 ) values (
   '00000000-0000-4000-8000-00000000c100',
   'Synthetic Laundry League',
-  'America/New_York',
+  'America/Indiana/Indianapolis',
   5,
   '2026-09-07'::date,
   '2026-09-20'::date,
@@ -117,17 +117,17 @@ insert into public.competition_weeks (
   (
     '00000000-0000-4000-8000-00000000c100',
     '2026-09-07'::date,
-    '2026-09-07'::timestamp at time zone 'America/New_York',
-    '2026-09-14'::timestamp at time zone 'America/New_York',
-    '2026-09-17'::timestamp at time zone 'America/New_York',
+    '2026-09-07'::timestamp at time zone 'America/Indiana/Indianapolis',
+    '2026-09-14'::timestamp at time zone 'America/Indiana/Indianapolis',
+    '2026-09-17'::timestamp at time zone 'America/Indiana/Indianapolis',
     false
   ),
   (
     '00000000-0000-4000-8000-00000000c100',
     '2026-09-14'::date,
-    '2026-09-14'::timestamp at time zone 'America/New_York',
-    '2026-09-21'::timestamp at time zone 'America/New_York',
-    '2026-09-24'::timestamp at time zone 'America/New_York',
+    '2026-09-14'::timestamp at time zone 'America/Indiana/Indianapolis',
+    '2026-09-21'::timestamp at time zone 'America/Indiana/Indianapolis',
+    '2026-09-24'::timestamp at time zone 'America/Indiana/Indianapolis',
     false
   )
 on conflict (competition_id, week_starts_on) do update set paused = false;

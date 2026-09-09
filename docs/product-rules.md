@@ -4,7 +4,8 @@ This document is normative for the hackathon MVP.
 
 ## Demo boundary
 
-- All bundled halls, profiles, invites, relationships, and activities are synthetic.
+- All bundled competition halls, profiles, invites, relationships, and activities are synthetic.
+- The separate Purdue West Lafayette housing catalog contains sourced public metadata only, never synthetic scores or verified residency claims. See `docs/purdue-context.md`.
 - Every demo screen retains a visible **Synthetic demo** label.
 - Simulated data is never presented as CSC- or university-confirmed.
 - `CscLaundryProvider` remains disabled and returns `provider_not_configured` until an approved integration contract exists.
@@ -12,7 +13,7 @@ This document is normative for the hackathon MVP.
 
 ## Competition
 
-- Timezone: `America/New_York`.
+- Timezone: `America/Indiana/Indianapolis`.
 - Week: Monday 00:00 inclusive through the following Monday 00:00 exclusive.
 - A participant earns at most one active weekly credit from an accepted qualifying washer session.
 - Dryer-only, failed, refunded, retracted, and duplicate activities do not qualify.

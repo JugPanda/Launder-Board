@@ -9,6 +9,7 @@ const PUBLIC_PATHS = new Set([
   "/sign-in",
   "/sign-in/actions",
   "/api/internal/search-index",
+  "/purdue/halls",
 ]);
 const PUBLIC_PREFIXES = ["/leaderboards/", "/p/", "/api/public/"];
 const DEMO_PREFIXES = [

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isSupabaseAuthConfigured } from "@/lib/supabase/env";
 
 type SignInPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -12,6 +13,29 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const params = await searchParams;
   const error = first(params.error);
   const message = first(params.message);
+
+  if (!isSupabaseAuthConfigured()) {
+    const demoHref = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled"
+      ? "/dashboard"
+      : "/leaderboards/fall-weekly-quest";
+    return (
+      <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">
+        <section className="w-full rounded-3xl border border-line bg-surface p-7 shadow-sm sm:p-9">
+          <Link className="text-xl font-black tracking-[-0.04em] text-accent" href="/">Launder Board</Link>
+          <p className="mt-8 text-sm font-bold uppercase tracking-[0.16em] text-accent">Demo-only access</p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight">Account setup pending</h1>
+          <p className="mt-3 leading-7 text-muted">
+            Sign-in and account creation are unavailable because the site&apos;s authentication service has not been configured.
+            You can explore synthetic demo data without an account. The demo does not save a real participant profile.
+          </p>
+          <Link className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-6 font-bold text-white" href={demoHref}>
+            View synthetic demo
+          </Link>
+          <p className="mt-5 text-sm leading-6 text-muted">The site operator needs to finish secure hosted authentication setup before accounts can be used.</p>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">

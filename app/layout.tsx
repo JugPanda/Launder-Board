@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Launder Board — weekly laundry challenge",
   description:
-    "A voluntary residence-hall laundry challenge where extra loads never buy extra points.",
+    "A Purdue West Lafayette-focused student hackathon project: voluntary weekly laundry participation without rewarding extra loads. Not affiliated with Purdue.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
