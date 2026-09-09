@@ -2,7 +2,7 @@ import Link from "next/link";
 import { DIRECTORY_SOURCE_URL, LAUNDRY_SOURCE_URL, PURDUE_HALLS, hallBySlug, parseHousingFilters, type HousingFilters, type PurdueHall } from "@/lib/purdue/catalog";
 import { searchPurdueHalls } from "@/lib/purdue/search.server";
 
-export const metadata = { title: "Purdue residence hall directory | Launder Board", description: "Source-linked West Lafayette residence hall metadata for fall 2026. Independent directory, not enrollment or competition standings." };
+export const metadata = { title: "Purdue residence hall directory | LaundroStat", description: "Source-linked West Lafayette residence hall metadata for fall 2026. Independent directory, not enrollment or competition standings." };
 const control = "min-h-11 w-full rounded-xl border border-line bg-surface px-3 py-2";
 function HallList({ halls, filters, explanations }: { halls: readonly PurdueHall[]; filters?: HousingFilters; explanations?: Record<string, string> }) {
   return <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{halls.map(hall => {
@@ -27,7 +27,7 @@ export default async function PurdueHallsPage({ searchParams }: { searchParams: 
   const result = requested && filters ? await searchPurdueHalls(filters) : undefined;
   const selected = filters?.hall ? hallBySlug(filters.hall) : undefined;
   return <main className="mx-auto min-h-screen max-w-6xl px-5 py-8 sm:px-8">
-    <nav aria-label="Directory navigation"><Link href="/" className="inline-flex min-h-11 items-center font-bold text-accent">← Launder Board</Link></nav>
+    <nav aria-label="Directory navigation"><Link href="/" className="inline-flex min-h-11 items-center font-bold text-accent">← LaundroStat</Link></nav>
     <header className="max-w-3xl py-8">
       <p className="font-mono text-sm font-bold uppercase tracking-widest text-accent">Purdue context · Fall 2026</p>
       <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">Find your residence hall.</h1>

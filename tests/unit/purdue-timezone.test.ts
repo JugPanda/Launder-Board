@@ -68,10 +68,24 @@ describe("additive Purdue migration", () => {
 
   // Opt in explicitly: local container only, no network URL or persistent writes.
   it.skipIf(process.env.RUN_PURDUE_DB_TEST !== "1")("executes against local PostgreSQL and rolls back all changes", () => {
+    const constraintState = () => execFileSync("docker", ["exec", "supabase_db_launder-board", "psql", "-X", "-U", "postgres", "-d", "postgres", "-Atc", "SELECT conname, pg_get_constraintdef(oid) FROM pg_constraint WHERE conname IN ('competitions_time_zone_check','competition_weeks_check','competition_weeks_check1') ORDER BY conname;"], { encoding: "utf8" });
+    const originalConstraints = constraintState();
     const sql = `
       BEGIN;
       SET LOCAL lock_timeout = '5s';
       SET LOCAL statement_timeout = '20s';
+      -- Reconstruct the legacy boundary inside this rollback-only transaction.
+      -- The local database may already have applied migration 0008.
+      ALTER TABLE public.competitions DROP CONSTRAINT competitions_time_zone_check;
+      UPDATE public.competitions SET time_zone = 'America/New_York';
+      ALTER TABLE public.competitions
+        ALTER COLUMN time_zone SET DEFAULT 'America/New_York',
+        ADD CONSTRAINT competitions_time_zone_check CHECK (time_zone = 'America/New_York');
+      ALTER TABLE public.competition_weeks
+        DROP CONSTRAINT competition_weeks_check,
+        DROP CONSTRAINT competition_weeks_check1,
+        ADD CONSTRAINT competition_weeks_check CHECK (starts_at = week_starts_on::timestamp AT TIME ZONE 'America/New_York') NOT VALID,
+        ADD CONSTRAINT competition_weeks_check1 CHECK (ends_at = (week_starts_on + 7)::timestamp AT TIME ZONE 'America/New_York') NOT VALID;
       INSERT INTO public.competitions(id, name, starts_on)
         VALUES ('00000000-0000-4000-8000-000000000008', 'Timezone regression', '2005-07-04');
       INSERT INTO public.competition_weeks(competition_id, week_starts_on, starts_at, ends_at, score_closes_at)
@@ -139,6 +153,6 @@ describe("additive Purdue migration", () => {
     expect(result).toContain("ROLLBACK");
     const after = execFileSync("docker", ["exec", "supabase_db_launder-board", "psql", "-X", "-U", "postgres", "-d", "postgres", "-Atc", "SELECT count(*) FROM public.competitions WHERE id = '00000000-0000-4000-8000-000000000008'; SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname = 'competitions_time_zone_check';"], { encoding: "utf8" });
     expect(after).toMatch(/^0\n/);
-    expect(after).toContain("America/New_York");
+    expect(constraintState()).toBe(originalConstraints);
   }, 60_000);
 });

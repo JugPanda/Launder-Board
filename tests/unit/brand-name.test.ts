@@ -7,6 +7,8 @@ const read = (path: string) => readFileSync(join(root, path), "utf8");
 
 const brandedFiles = [
   "README.md",
+  "app/(public)/purdue/halls/page.tsx",
+  "docs/supabase-setup.md",
   "app/layout.tsx",
   "app/(public)/page.tsx",
   "app/(auth)/sign-in/page.tsx",

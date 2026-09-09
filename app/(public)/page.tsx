@@ -93,7 +93,7 @@ export default function HomePage() {
         </div>
       </section>
       <footer className="border-t border-line py-8 text-sm leading-6 text-muted">
-        Launder Board is not affiliated with or endorsed by Purdue University, University Residences, CSC ServiceWorks, CSCPay, or Typesense.
+        LaundroStat is not affiliated with or endorsed by Purdue University, University Residences, CSC ServiceWorks, CSCPay, or Typesense.
         No university logos, student directory, or live laundry-provider data are used.
       </footer>
     </main>

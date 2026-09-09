@@ -25,7 +25,7 @@ export const DEMO_COMPETITION = Object.freeze({
   name: "Maple · River · Oak weekly quest",
   shortName: "Weekly hall quest",
   weekLabel: "September 7–13",
-  timezone: "America/New_York",
+  timezone: "America/Indiana/Indianapolis",
   closesLabel: "Sunday at 11:59 PM ET",
   halls: Object.freeze<readonly DemoHall[]>([
     Object.freeze({

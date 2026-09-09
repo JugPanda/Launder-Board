@@ -8,13 +8,13 @@
 
 ## Git workflow
 
-- Branch from `main`.
-- Use short branches such as `feat/search-flow` or `fix/result-ranking`.
+- Work directly on `main`; do not create branches or pull requests unless Jug explicitly asks.
+- Fetch and integrate remote `main` before pushing; preserve teammates' changes and never force-push.
 - Keep commits focused and use imperative messages.
-- Open a pull request instead of pushing unfinished implementation directly to `main`.
+- Run the relevant verification before pushing to `main`, which triggers production deployment.
 - Document new environment variables in `.env.example`; never commit real credentials.
 
-## Pull-request evidence
+## Delivery evidence
 
 Include:
 

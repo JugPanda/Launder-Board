@@ -64,7 +64,7 @@ The current `signUp({ email, password })` call does not supply `emailRedirectTo`
 
 Supabase's default SMTP is for testing, not production: it sends only to pre-authorized organization team addresses and imposes very low rate limits (documented as two messages/hour, subject to change). Other users can fail signup/email delivery even with correct API keys.
 
-Configure a custom SMTP provider under Authentication → SMTP, verify the sender domain/address (including the provider's DNS requirements), and securely enter its host, port, username, and password. Check provider sandbox/recipient restrictions and Supabase auth rate limits. Test with an authorized mailbox you control, check spam folders, and test expired links and resend limits. Do not turn off email confirmation merely to hide delivery failures, and do not invite someone into your Supabase organization just to let them use Launder Board.
+Configure a custom SMTP provider under Authentication → SMTP, verify the sender domain/address (including the provider's DNS requirements), and securely enter its host, port, username, and password. Check provider sandbox/recipient restrictions and Supabase auth rate limits. Test with an authorized mailbox you control, check spam folders, and test expired links and resend limits. Do not turn off email confirmation merely to hide delivery failures, and do not invite someone into your Supabase organization just to let them use LaundroStat.
 
 ## 6. Redeploy and verify honestly
 

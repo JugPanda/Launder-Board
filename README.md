@@ -8,7 +8,7 @@ Purdue University West Lafayette-focused student hackathon project. Not affiliat
 
 A privacy-first, mobile-friendly residence-hall laundry challenge built for a short hackathon. Participants voluntarily record laundry activity, encourage consenting friends, and help their hall through one normalized weekly participation credit.
 
-> **Demo data:** Every included person, hall, invite, and activity record is synthetic. The MVP does not claim a live CSC integration or university partnership.
+> **Demo data:** Every included person, competition hall, invite, and activity record is synthetic. The separate Purdue housing catalog contains source-linked public metadata, not standings. The MVP does not claim a live CSC integration or university partnership.
 
 ## Product promise
 
@@ -85,4 +85,4 @@ Live CSCPay/CSC GO sync, university SSO/directory imports, native mobile apps, e
 
 ## Repository workflow
 
-Development uses focused branches and pull requests. Never commit credentials, real student records, private account statements, or unlabeled synthetic fallbacks. Read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.
+Development uses verified, focused commits pushed directly to `main`. Never commit credentials, real student records, private account statements, or unlabeled synthetic fallbacks. Read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.

@@ -1,13 +1,13 @@
 # Purdue West Lafayette scope
 
-Reviewed 2026-09-09. The current name remains **Launder Board**, superseding the supplied prompt's pay2win name and former repository URL. Canonical repository: https://github.com/JugPanda/Launder-Board.
+Reviewed 2026-09-09. The current name remains **LaundroStat**, superseding the supplied prompt's pay2win name and former repository URL. Canonical repository: https://github.com/JugPanda/Launder-Board.
 
 ## Public facts and boundaries
 
 - Scope is Purdue University West Lafayette, not Indianapolis, Global, or the statewide system.
 - Scheduling timezone: `America/Indiana/Indianapolis`; migration 0008 explicitly replaces the prior New York identifier without rewriting migration history or existing event timestamps.
 - Use University Residences (UR), residence hall, and Boilermaker accurately. UR Boiler Apartments (URBA) are a separate housing category and excluded from this initial catalog.
-- Launder Board is a student hackathon project, not affiliated with or endorsed by Purdue, UR, CSC ServiceWorks, CSCPay, or Typesense. No protected marks are used.
+- LaundroStat is a student hackathon project, not affiliated with or endorsed by Purdue, UR, CSC ServiceWorks, CSCPay, or Typesense. No protected marks are used.
 - Canonical housing metadata is separate from fictional Maple/River/Oak standings. The housing catalog has no student population, machine counts, availability, competition scores, participant identities, or manufactured hall invites.
 - Choosing a hall in the public directory opens its details; it does not enroll a user or verify residency. Organizer-issued hall invitations remain required for enrollment.
 
