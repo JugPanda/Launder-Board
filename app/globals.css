@@ -49,11 +49,50 @@ body {
   outline-offset: 3px;
 }
 
+/* Motion is brief and task-oriented: it confirms hierarchy without
+   delaying interaction or making content depend on JavaScript. */
+.motion-rise {
+  animation: rise-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.motion-delay-1 { animation-delay: 45ms; }
+.motion-delay-2 { animation-delay: 90ms; }
+.motion-delay-3 { animation-delay: 135ms; }
+.motion-delay-4 { animation-delay: 180ms; }
+
+.motion-lift {
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease-out,
+    border-color 180ms ease-out,
+    background-color 120ms ease-out;
+}
+
+.motion-lift:hover {
+  transform: translateY(-3px);
+}
+
+.motion-lift:active {
+  transform: translateY(0) scale(0.985);
+}
+
+@keyframes rise-in {
+  from { transform: translateY(10px); }
+  to { transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .motion-lift:hover,
+  .motion-lift:active {
+    transform: none;
   }
 }

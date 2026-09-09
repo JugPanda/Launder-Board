@@ -1,5 +1,15 @@
 import Link from "next/link";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  ShieldCheck,
+  WashingMachine,
+} from "lucide-react";
+
 import { isSupabaseAuthConfigured } from "@/lib/supabase/env";
+
+import styles from "./sign-in.module.css";
 
 type SignInPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -14,90 +24,131 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const error = first(params.error);
   const message = first(params.message);
   const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
-
-  if (!isSupabaseAuthConfigured()) {
-    const demoHref = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled"
-      ? "/demo"
-      : "/leaderboards/fall-weekly-quest";
-    return (
-      <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">
-        <section className="w-full rounded-3xl border border-line bg-surface p-7 shadow-sm sm:p-9">
-          <Link className="text-xl font-black tracking-[-0.04em] text-accent" href="/">LaundroStat</Link>
-          <p className="mt-8 text-sm font-bold uppercase tracking-[0.16em] text-accent">Demo-only access</p>
-          <h1 className="mt-2 text-4xl font-black tracking-tight">Account setup pending</h1>
-          <p className="mt-3 leading-7 text-muted">
-            Sign-in and account creation are unavailable because the site&apos;s authentication service has not been configured.
-            You can explore synthetic demo data without an account. The demo does not save a real participant profile.
-          </p>
-          <Link className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-6 font-bold text-white" href={demoHref}>
-            View synthetic demo
-          </Link>
-          <p className="mt-5 text-sm leading-6 text-muted">The site operator needs to finish secure hosted authentication setup before accounts can be used.</p>
-        </section>
-      </main>
-    );
-  }
+  const authConfigured = isSupabaseAuthConfigured();
+  const demoHref = guestRelease ? "/demo" : "/leaderboards/fall-weekly-quest";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">
-      <section className="w-full rounded-3xl border border-line bg-surface p-7 shadow-sm sm:p-9">
-        <Link className="text-xl font-black tracking-[-0.04em] text-accent" href="/">
-          LaundroStat
-        </Link>
-        <p className="mt-8 text-sm font-bold uppercase tracking-[0.16em] text-accent">
-          {guestRelease ? "Presentation account" : "Participant access"}
-        </p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight">{guestRelease ? "Demo account sign in" : "Sign in or join"}</h1>
-        <p className="mt-3 leading-7 text-muted">
-          {guestRelease ? "Use your provided presentation account. This is a synthetic demo, not a university account. Demo nudges and preset updates are saved to your account; no real students are contacted." : "Your hall invite is used during onboarding, after your account is authenticated."}
-        </p>
+    <main className={styles.page}>
+      <div className={styles.safety}>
+        <ShieldCheck aria-hidden="true" size={16} />
+        <span>
+          {guestRelease
+            ? "SYNTHETIC DEMO · Presentation access only · No real student records"
+            : "INDEPENDENT STUDENT CONCEPT · Privacy-first participation"}
+        </span>
+      </div>
 
-        {error ? (
-          <p role="alert" className="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-            {error}
-          </p>
-        ) : null}
-        {message ? (
-          <p className="mt-5 rounded-2xl border border-line bg-background p-4 text-sm">
-            {message}
-          </p>
-        ) : null}
+      <div className={styles.frame}>
+        <header className={`${styles.header} motion-rise`}>
+          <Link className={styles.brand} href="/">
+            <span className={styles.brandMark}>
+              <WashingMachine aria-hidden="true" size={24} />
+            </span>
+            <span>LaundroStat</span>
+            <span className={styles.brandTag}>/ laundry, together</span>
+          </Link>
+          <Link aria-label="Back to LaundroStat home" className={styles.backLink} href="/">
+            <ArrowLeft aria-hidden="true" size={17} />
+            <span>Back to home</span>
+          </Link>
+        </header>
 
-        <form action="/sign-in/actions" method="post" className="mt-7 grid gap-5">
-          <label className="grid gap-2 font-bold">
-            Email
-            <input
-              className="min-h-12 rounded-xl border border-line bg-white px-4 font-normal"
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={254}
-              required
-            />
-          </label>
-          <label className="grid gap-2 font-bold">
-            Password
-            <input
-              className="min-h-12 rounded-xl border border-line bg-white px-4 font-normal"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              minLength={8}
-              maxLength={128}
-              required
-            />
-          </label>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <button className="min-h-12 rounded-full bg-accent px-6 font-bold text-white" name="intent" value="sign-in">
-              Sign in
-            </button>
-            {!guestRelease && <button className="min-h-12 rounded-full border border-line bg-white px-6 font-bold" name="intent" value="sign-up">
-              Create account
-            </button>}
-          </div>
-        </form>
-        {guestRelease && <Link className="mt-6 inline-flex min-h-12 items-center font-bold text-accent" href="/demo">Explore the public demo without signing in</Link>}
-      </section>
+        <div className={styles.layout}>
+          <aside className={`${styles.story} motion-rise motion-delay-2`} aria-labelledby="sign-in-story-heading">
+            <p className={styles.eyebrow}>Laundry, together</p>
+            <h2 id="sign-in-story-heading">Your laundry routine, in one place.</h2>
+            <p className={styles.storyIntro}>
+              Return to your Clean-O-Meter, saved demo nudges, Wash Mate matches, and Dorm Wars view.
+            </p>
+
+            <div className={styles.drum} aria-hidden="true">
+              <div className={styles.drumInner}>
+                <div>
+                  <WashingMachine size={54} strokeWidth={1.5} />
+                  <span>Fresh start</span>
+                </div>
+              </div>
+            </div>
+
+            <ul className={styles.proofList}>
+              <li><CheckCircle2 aria-hidden="true" size={19} /> Account-bound demo updates remain available after refresh.</li>
+              <li><CheckCircle2 aria-hidden="true" size={19} /> Synthetic profiles stay clearly separate from the real creator team.</li>
+              <li><CheckCircle2 aria-hidden="true" size={19} /> No real students are contacted and nothing is sent to CSC.</li>
+            </ul>
+          </aside>
+
+          <section className={`${styles.card} motion-rise motion-delay-1`} aria-labelledby="sign-in-heading">
+            <p className={styles.kicker}>
+              {authConfigured
+                ? (guestRelease ? "Presentation account" : "Participant access")
+                : "Demo-only access"}
+            </p>
+            <h1 id="sign-in-heading">
+              {authConfigured
+                ? (guestRelease ? "Demo account sign in" : "Sign in or join")
+                : "Account setup pending"}
+            </h1>
+            <p className={styles.description}>
+              {!authConfigured
+                ? "Sign-in and account creation are unavailable because the authentication service has not been configured. Explore synthetic demo data without creating a participant profile."
+                : guestRelease
+                  ? "Use your provided presentation account. This is a synthetic demo, not a university account. Demo nudges and preset updates are saved to your account; no real students are contacted."
+                  : "Sign in first, then use your hall invite during onboarding."}
+            </p>
+
+            {error ? <p role="alert" className={styles.alert}>{error}</p> : null}
+            {message ? <p className={styles.message}>{message}</p> : null}
+
+            {authConfigured ? (
+              <form action="/sign-in/actions" method="post" className={styles.form}>
+                <label className={styles.field}>
+                  Email
+                  <input
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    inputMode="email"
+                    maxLength={254}
+                    required
+                  />
+                </label>
+                <label className={styles.field}>
+                  Password
+                  <input
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    minLength={8}
+                    maxLength={128}
+                    required
+                  />
+                </label>
+                <div className={styles.actions}>
+                  <button className={styles.primaryButton} name="intent" value="sign-in">
+                    Sign in <ArrowRight aria-hidden="true" size={18} />
+                  </button>
+                  {!guestRelease ? (
+                    <button className={styles.secondaryButton} name="intent" value="sign-up">
+                      Create account
+                    </button>
+                  ) : null}
+                </div>
+              </form>
+            ) : (
+              <Link className={`${styles.primaryButton} motion-lift`} href={demoHref}>
+                View synthetic demo <ArrowRight aria-hidden="true" size={18} />
+              </Link>
+            )}
+
+            <div className={styles.demoRow}>
+              <span>{authConfigured ? "Want to look around first?" : "No account or credentials required."}</span>
+              <Link className={styles.demoLink} href={demoHref}>
+                Explore the public demo <ArrowRight aria-hidden="true" size={17} />
+              </Link>
+            </div>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
