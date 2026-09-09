@@ -1,47 +1,82 @@
-# Hackathon Ideas
+# pay2win
 
-A working repository for comparing, validating, and building our hackathon project.
+A privacy-first, mobile-friendly residence-hall laundry challenge built for a short hackathon. Participants voluntarily record laundry activity, encourage consenting friends, and help their hall through one normalized weekly participation credit.
 
-## Current status
+> **Demo data:** Every included person, hall, invite, and activity record is synthetic. The MVP does not claim a live CSC integration or university partnership.
 
-**Phase:** concept selection
+## Product promise
 
-We have twelve search-and-discovery concepts. No winner has been selected yet, and the repository intentionally does not present untested assumptions as validated facts.
+**Win your hall's weekly laundry challenge—without wasting loads.**
 
-## Idea shortlist
+- One qualifying washer session earns one weekly credit.
+- Additional loads, spending, duration, and load size earn no extra points.
+- Hall standings use credited participants divided by the locked eligible roster.
+- Profiles, directory discovery, reminders, imports, and public sharing are private/off by default and independently revocable.
+- Search results describe only activity shared with pay2win: “No recorded wash in the last 14 days,” never a claim about a person's hygiene.
 
-1. **Lost & Found AI** — match lost belongings with differently worded reports, photos, locations, and dates.
-2. **SideQuest** — turn nearby activities into game-style quests based on time, budget, location, and mood.
-3. **Search Party** — solve a fictional mystery by searching evidence and connecting discoveries.
-4. **Thingamajig** — identify objects from awkward descriptions when users cannot remember their names.
-5. **ClipQuest** — find moments inside recordings and jump directly to the matching timestamp.
-6. **Screenshot Memory** — search screenshot collections by meaning, visual appearance, and extracted text.
-7. **Fridge Clutch** — rank meals by available ingredients, equipment, time, and approaching use-by dates.
-8. **QuietQuest** — find nearby places using practical qualities such as noise, lighting, outlets, and hours.
-9. **GameDNA** — find games matching a group's exact experience and hardware requirements.
-10. **BorrowBox** — find nearby items available to borrow within a requested time window.
-11. **Meme Concierge** — retrieve memes that match the meaning and emotional context of a situation.
-12. **Second Life** — find reuse projects based on materials, tools, and time already available.
+## Locked MVP
 
-See [IDEAS.md](IDEAS.md) for the complete descriptions and distinguishing demo hooks.
+- One fictional campus with Maple, River, and Oak halls.
+- Eighteen synthetic participants, six per hall.
+- Monday-to-Monday competition weeks in `America/New_York`.
+- Minimum five-person eligible roster for public ranking.
+- Seventy-two-hour late-import window.
+- At most two credited participants on an accepted shared session.
+- Manual, user-file, and visibly simulated activity adapters.
+- Disabled CSC adapter until written authorization and official credentials exist.
+- Typesense-powered, server-mediated participant and hall search.
+- In-app preset encouragement only; no free-text, SMS, email, or push.
 
-## Selection process
+See [docs/product-rules.md](docs/product-rules.md) for the normative product and privacy rules.
 
-1. Pick the strongest three concepts individually.
-2. Score those concepts using [docs/decision-scorecard.md](docs/decision-scorecard.md).
-3. Validate the riskiest assumption behind each finalist.
-4. Select one concept and record the decision.
-5. Define the smallest reliable demo using [docs/mvp-template.md](docs/mvp-template.md).
-6. Build the happy path before adding secondary features.
+## Stack
 
-## Repository principles
+- Next.js 16 App Router, React 19, TypeScript, Tailwind CSS
+- Supabase Auth, PostgreSQL, Storage, and RLS
+- Typesense 30.2
+- Zod, Vitest, Playwright
+- Vercel
 
-- Optimize for a clear, memorable live demo.
-- Prefer a small experience that works over a broad product that fails unpredictably.
-- Use real or clearly labeled synthetic demo data.
-- Do not expose personal data, private recordings, credentials, or unlicensed assets.
-- Record technical and product decisions so every teammate can contribute quickly.
+## Local setup
 
-## Working agreements
+```bash
+npm install
+cp .env.example .env.local
+npx supabase start
+docker run --rm -p 8108:8108 typesense/typesense:30.2 \
+  --data-dir /tmp/typesense-data \
+  --api-key=pay2win-local-dev-key \
+  --enable-cors=false
+npm run dev
+```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before implementation. Once an idea is selected, add its architecture, setup instructions, environment-variable contract, and verified demo procedure here.
+Copy the local Supabase values printed by `supabase start` into `.env.local`. Use the Typesense local key only for local development.
+
+## Verification
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run test:e2e
+```
+
+## Demo path
+
+1. Open the synthetic demo as Maya Quest.
+2. Show the one-credit weekly rule and source labels.
+3. Search consenting accepted friends with no recorded wash in 14 days.
+4. Send one preset encouragement and show the 72-hour cooldown.
+5. Import the synthetic CSV; preview a new washer row, duplicate, and refunded row.
+6. Show that a second washer session adds no extra weekly credit.
+7. Confirm Maple's normalized result updates.
+8. Disable public sharing and verify the public profile disappears immediately.
+
+## Explicitly deferred
+
+Live CSCPay/CSC GO sync, university SSO/directory imports, native mobile apps, external notifications, free-text messaging, photo or load-size estimation, spending/load-count leaderboards, material prizes, and conversational RAG.
+
+## Repository workflow
+
+Development uses focused branches and pull requests. Never commit credentials, real student records, private account statements, or unlabeled synthetic fallbacks. Read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.
