@@ -1,0 +1,19 @@
+services:
+  typesense:
+    image: typesense/typesense:30.2
+    command:
+      - --data-dir=/data
+      - --api-key=${TYPESENSE_API_KEY:-pay2win-local-dev-key}
+      - --enable-cors=false
+    ports:
+      - "8108:8108"
+    volumes:
+      - typesense-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8108/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  typesense-data:

@@ -8,6 +8,9 @@ node_modules/
 .next/
 dist/
 coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
 
 # Python
 .venv/
@@ -20,6 +23,8 @@ __pycache__/
 .DS_Store
 
 # Local artifacts
+.hermes/
+.vercel/
 *.log
 *.sqlite
 *.sqlite3
