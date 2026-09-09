@@ -30,6 +30,6 @@ describe("tracking state UI", () => {
     render(<TrackingState state={state} />);
     expect(screen.getByRole("status")).toHaveAttribute("data-tracking-state", state);
     expect(screen.getByText(label)).toBeInTheDocument();
-    expect(screen.getByText("Based on activity shared with pay2win.")).toBeInTheDocument();
+    expect(screen.getByText("Based on activity shared with Launder Board.")).toBeInTheDocument();
   });
 });

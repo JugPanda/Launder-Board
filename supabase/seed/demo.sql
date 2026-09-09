@@ -1,4 +1,4 @@
--- Synthetic pay2win demo seed. No row represents a real student, hall, or provider record.
+-- Synthetic Launder Board demo seed. No row represents a real student, hall, or provider record.
 -- Local-only password for all fixtures: demo-pass-2026
 
 begin;

@@ -1,4 +1,4 @@
-# pay2win MVP product rules
+# Launder Board MVP product rules
 
 This document is normative for the hackathon MVP.
 
@@ -66,7 +66,7 @@ Uploaded files are private, deleted synchronously after successful normalization
 Use:
 
 - “No recorded wash in the last 14 days.”
-- “Based on activity shared with pay2win.”
+- “Based on activity shared with Launder Board.”
 - “Tracking is incomplete; reminder status unavailable.”
 - “Simulated CSC-format demo record.”
 

@@ -1,8 +1,8 @@
-# pay2win design system
+# Launder Board design system
 
 ## Direction
 
-Clean utility with restrained arcade-score energy. Use lowercase `pay2win`, washer-door circles, and concise quest language. No portraits, stock imagery, podium/loser imagery, public shame, or red downward-rank indicators. The first viewport states: **Paying more never buys more points.**
+Clean utility with restrained arcade-score energy. Use the two-word title case `Launder Board`, washer-door circles, and concise quest language. No portraits, stock imagery, podium/loser imagery, public shame, or red downward-rank indicators. The first viewport states: **Paying more never buys more points.**
 
 ## Tokens
 

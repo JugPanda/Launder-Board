@@ -19,7 +19,7 @@ export default function ActivityPage() {
               Activity history
             </h1>
             <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-              Review every activity shared with pay2win and see which records counted toward this week.
+              Review every activity shared with Launder Board and see which records counted toward this week.
             </p>
           </div>
           <div className="flex flex-col gap-2 min-[360px]:flex-row sm:justify-end">
