@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Launder Board — weekly laundry challenge",
+  title: "LaundroStat — weekly laundry challenge",
   description:
     "A Purdue West Lafayette-focused student hackathon project: voluntary weekly laundry participation without rewarding extra loads. Not affiliated with Purdue.",
 };

@@ -20,11 +20,11 @@ const brandedFiles = [
   "docs/product-rules.md",
 ];
 
-describe("Launder Board brand contract", () => {
+describe("LaundroStat brand contract", () => {
   it.each(brandedFiles)("uses the chosen name in %s", (path) => {
     const source = read(path);
-    expect(source).toContain("Launder Board");
-    expect(source).not.toMatch(/pay2win/i);
+    expect(source).toContain("LaundroStat");
+    expect(source).not.toMatch(/pay2win|Launder Board/i);
   });
 
   it("uses deployment-safe internal names", () => {

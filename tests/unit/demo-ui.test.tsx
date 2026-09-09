@@ -25,7 +25,7 @@ describe("synthetic demo experience", () => {
     expect(screen.getByText(/1 of 1 weekly credits/i)).toBeVisible();
     expect(screen.getByText("Simulated CSC-format demo")).toBeVisible();
     expect(screen.getByText("Self-reported")).toBeVisible();
-    expect(screen.getByText(/based on activity shared with Launder Board/i)).toBeVisible();
+    expect(screen.getByText(/based on activity shared with LaundroStat/i)).toBeVisible();
   });
 
   it("demonstrates a clearly labeled typo-tolerant hall search", () => {

@@ -210,7 +210,7 @@ export interface DueEncouragementDto {
   displayName: string;
   reason: "accepted_friend" | "same_hall";
   reminderText: string;
-  context: "Based on activity shared with Launder Board.";
+  context: "Based on activity shared with LaundroStat.";
 }
 
 export interface SentEncouragementDto {
@@ -266,7 +266,7 @@ export class EncouragementService {
         displayName: candidate.displayName,
         reason: candidate.acceptedFriend ? "accepted_friend" : "same_hall",
         reminderText: `No recorded wash in the last ${candidate.reminderDays} days.`,
-        context: "Based on activity shared with Launder Board.",
+        context: "Based on activity shared with LaundroStat.",
       }));
   }
 

@@ -14,7 +14,7 @@ describe("activity history", () => {
     expect(screen.getByRole("heading", { level: 1, name: /activity history/i })).toBeVisible();
     expect(screen.getAllByText("Simulated CSC-format demo")).toHaveLength(1);
     expect(screen.getAllByText("Self-reported")).toHaveLength(2);
-    expect(screen.getByText(/based on activity shared with Launder Board/i)).toBeVisible();
+    expect(screen.getByText(/based on activity shared with LaundroStat/i)).toBeVisible();
     expect(screen.getByText(/provider-confirmed/i)).toBeVisible();
     expect(screen.getByRole("link", { name: /add activity/i })).toHaveAttribute("href", "/activity/new");
     expect(screen.getByRole("link", { name: /import activity/i })).toHaveAttribute("href", "/activity/import");
