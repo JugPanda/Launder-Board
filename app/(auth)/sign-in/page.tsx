@@ -17,7 +17,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
     <main className="mx-auto flex min-h-screen max-w-lg items-center px-5 py-12">
       <section className="w-full rounded-3xl border border-line bg-surface p-7 shadow-sm sm:p-9">
         <Link className="text-xl font-black tracking-[-0.04em] text-accent" href="/">
-          pay2win
+          Launder Board
         </Link>
         <p className="mt-8 text-sm font-bold uppercase tracking-[0.16em] text-accent">
           Participant access

@@ -12,6 +12,11 @@ describe("synthetic demo proxy coverage", () => {
     },
   );
 
+  it("allows only the cron-protected index worker through Proxy", () => {
+    expect(source).toContain('"/api/internal/search-index"');
+    expect(source).not.toContain('"/api/internal/"');
+  });
+
   it("does not make API routes public as part of demo mode", () => {
     expect(source).not.toMatch(/DEMO_PREFIXES[^;]+\/api\//s);
   });

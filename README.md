@@ -1,4 +1,4 @@
-# pay2win
+# Launder Board
 
 A privacy-first, mobile-friendly residence-hall laundry challenge built for a short hackathon. Participants voluntarily record laundry activity, encourage consenting friends, and help their hall through one normalized weekly participation credit.
 
@@ -12,7 +12,7 @@ A privacy-first, mobile-friendly residence-hall laundry challenge built for a sh
 - Additional loads, spending, duration, and load size earn no extra points.
 - Hall standings use credited participants divided by the locked eligible roster.
 - Profiles, directory discovery, reminders, imports, and public sharing are private/off by default and independently revocable.
-- Search results describe only activity shared with pay2win: “No recorded wash in the last 14 days,” never a claim about a person's hygiene.
+- Search results describe only activity shared with Launder Board: “No recorded wash in the last 14 days,” never a claim about a person's hygiene.
 
 ## Locked MVP
 
@@ -45,7 +45,7 @@ cp .env.example .env.local
 npx supabase start
 docker run --rm -p 8108:8108 typesense/typesense:30.2 \
   --data-dir /tmp/typesense-data \
-  --api-key=pay2win-local-dev-key \
+  --api-key=launder-board-local-dev-key \
   --enable-cors=false
 npm run dev
 ```

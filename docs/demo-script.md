@@ -1,4 +1,4 @@
-# Two-minute pay2win demo
+# Two-minute Launder Board demo
 
 Use only bundled synthetic fixtures. Keep the **Synthetic demo** banner visible throughout.
 
@@ -6,7 +6,7 @@ Use only bundled synthetic fixtures. Keep the **Synthetic demo** banner visible 
 
 Open the mobile landing page.
 
-> pay2win turns laundry into a hall competition, but paying more never buys points. Each participant can help their hall once per week.
+> Launder Board turns laundry into a hall competition, but paying more never buys points. Each participant can help their hall once per week.
 
 Show Maple, River, and Oak as percentages with credited/eligible counts—not load totals.
 
