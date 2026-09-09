@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
   if (hostedDemoPaths.includes(pathname)) return applyNoStore(response);
   const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
   const archivedDemo = DEMO_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix.endsWith("/") ? prefix : prefix + "/"));
-  if (guestRelease && request.method === "GET" && (pathname === "/onboarding" || archivedDemo || pathname.startsWith("/leaderboards/") || pathname.startsWith("/p/"))) {
+  if (request.method === "GET" && (pathname === "/onboarding" || archivedDemo || pathname.startsWith("/leaderboards/") || pathname.startsWith("/p/"))) {
     return redirectWithCookies(request, response, "/demo");
   }
   const isPublic =
@@ -154,6 +154,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

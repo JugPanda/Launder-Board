@@ -34,6 +34,13 @@ it("keeps signout reachable for its own origin guard", async () => {
 it("does not enable archived application routes", async () => {
   expect((await proxy(new NextRequest("https://example.test/dashboard"))).headers.get("location")).toBe("https://example.test/demo");
 });
+it("keeps archived weekly-credit routes disabled even when the demo flag is off", async () => {
+  vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "disabled");
+  for (const path of ["/dashboard", "/onboarding", "/competitions/fall-weekly-quest", "/leaderboards/fall-weekly-quest", "/p/maya-quest"]) {
+    const response = await proxy(new NextRequest(`https://example.test${path}`));
+    expect(response.headers.get("location")).toBe("https://example.test/demo");
+  }
+});
 
 const source = readFileSync(join(process.cwd(), "proxy.ts"), "utf8");
 

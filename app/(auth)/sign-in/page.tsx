@@ -25,7 +25,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const message = first(params.message);
   const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
   const authConfigured = isSupabaseAuthConfigured();
-  const demoHref = guestRelease ? "/demo" : "/leaderboards/fall-weekly-quest";
+  const demoHref = "/demo";
 
   return (
     <main className={styles.page}>

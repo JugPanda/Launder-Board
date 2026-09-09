@@ -36,7 +36,6 @@ export async function participants(ids?: string[]): Promise<GuestParticipant[]> 
       lastFullCycleDate: r.last_full_cycle_date, source: r.source_label, usualDays: r.usual_days,
       usualTimeWindow: r.usual_time_window,
       scenarioLabel: 'Synthetic hosted scenario; generated schedule and source labels, no verified CSC data',
-      scoreBasis: { label: 'Not used: hosted Clean-O-Meter uses database recency and streak only', loads: [], scoreBeforeInactivity: 0 },
     };
   });
 }

@@ -3,70 +3,20 @@ export const GUEST_DATA_AS_OF = '2026-09-08';
 export const GUEST_DEMO_ASSUMPTIONS = Object.freeze([
   'All nine participants are synthetic brief examples, as of September 8, 2026. No actual student activity or CSC connection is used.',
   'PRIMARY Clean-O-Meter is an explicitly synthetic model: clamp(100 - 4 * daysSinceWash + 2 * clamp(scrubStreak, 0, 6), 0, 100), rounded to two decimals; unknown tracking has no score. It measures recency and consistency, never load volume.',
-  'Streak, source credibility labels, and usual schedules are generated scenario fields, not verified facts. CSC-format means simulated format only, not an actual connection or verified completion.',
-  'Weighted load scores in scoreBasis are a nonprimary proposed-rules lab only, NOT the Clean-O-Meter or leaderboard ranking.',
+  'Streak, record-source labels, and usual schedules are generated scenario fields, not verified facts. CSC-format means simulated format only, not an actual connection or verified completion.',
   'Public participants and the two Friends participants are assumed to consent to reminders in this demo scenario only. This is not real friendship or authorization.',
-  'Bonuses are additive percentages of base load points; delay penalties subtract percentages of the same base, floored at zero. Scrub then multiplies the result.',
-  'Log means log10. loadOrdinal3Days and loads24Hours include the current completed load; loads after the third in 24 hours earn zero.',
-  'lintBonus means a qualifying clean-lint photo within 15 minutes; foldBonus means a qualifying folded-clothes photo within 60 minutes. These flags are simulated, not verified evidence.',
-  'scrubScore is an already-earned integer level, clamped to 0–6. Earning eligibility (within 8 days, at most once per 6 days) is not inferred without activity history.',
-  'Inactivity applies to the entire simulated profile total at day 16 and every 3 additional days, compounded. Unknown tracking is not treated as inactivity.',
   'Reminder search returns only consent-assumed, current, non-private profiles and coarse days-since-wash, never exact activity times or load history.',
 ]);
-
-export interface LoadScoreInput {
-  weightLbs: number;
-  lintBonus?: boolean;
-  foldBonus?: boolean;
-  washerDelayMinutes?: number;
-  dryerDelayMinutes?: number;
-  loadOrdinal3Days?: number;
-  /** Number of loads in the rolling 24 hours INCLUDING this load. */
-  loads24Hours?: number;
-  scrubScore?: number;
-}
 
 function nonnegative(value: number, name: string): number {
   if (!Number.isFinite(value) || value < 0) throw new RangeError(`${name} must be finite and nonnegative`);
   return value;
 }
-function positiveInteger(value: number, name: string): number {
-  if (!Number.isSafeInteger(value) || value < 1) throw new RangeError(`${name} must be a positive integer`);
-  return value;
-}
+
 function roundScore(value: number): number {
   if (!Number.isFinite(value)) throw new RangeError('Score exceeds the finite numeric range');
   const bounded = Math.max(0, value);
   return Number(bounded.toFixed(2));
-}
-
-/** Proposed rules only; assumes a completed load and qualified bonus flags. */
-export function calculateLoadScore(input: LoadScoreInput): number {
-  const weight = nonnegative(input.weightLbs, 'weightLbs');
-  const washerDelay = nonnegative(input.washerDelayMinutes ?? 0, 'washerDelayMinutes');
-  const dryerDelay = nonnegative(input.dryerDelayMinutes ?? 0, 'dryerDelayMinutes');
-  const ordinal = positiveInteger(input.loadOrdinal3Days ?? 1, 'loadOrdinal3Days');
-  const loads24Hours = positiveInteger(input.loads24Hours ?? 1, 'loads24Hours');
-  const scrub = input.scrubScore ?? 0;
-  if (!Number.isSafeInteger(scrub)) throw new RangeError('scrubScore must be a finite integer');
-  for (const bonus of [input.lintBonus, input.foldBonus]) {
-    if (bonus !== undefined && typeof bonus !== 'boolean') throw new TypeError('Bonus flags must be boolean');
-  }
-  if (loads24Hours > 3) return 0;
-  const base = 0.6 * weight + 0.4 * weight;
-  const bonus = (input.lintBonus ? 0.1 : 0) + (input.foldBonus ? 0.3 : 0);
-  const penalty = Math.floor(washerDelay / 30) * 0.1 + Math.floor(dryerDelay / 30) * 0.05;
-  const frequencyMultiplier = Math.max(0, 1 - Math.log10(ordinal));
-  const scrubMultiplier = 1 + Math.max(0, Math.min(6, scrub)) * 0.05;
-  return roundScore(base * Math.max(0, 1 + bonus - penalty) * frequencyMultiplier * scrubMultiplier);
-}
-
-/** Pass an unpenalized whole profile score; do not repeatedly penalize a stored result. */
-export function applyInactivityPenalty(score: number, daysSinceWash: number): number {
-  nonnegative(score, 'score');
-  nonnegative(daysSinceWash, 'daysSinceWash');
-  const penalties = daysSinceWash < 16 ? 0 : 1 + Math.floor((daysSinceWash - 16) / 3);
-  return roundScore(score * Math.pow(0.9, penalties));
 }
 
 /** Synthetic recency/consistency model, independent of load volume and source claims. */
@@ -94,23 +44,13 @@ export interface GuestParticipant {
   readonly usualDays: readonly string[];
   readonly usualTimeWindow: string;
   readonly scenarioLabel: string;
-  readonly scoreBasis: {
-    readonly label: string;
-    readonly loads: readonly Readonly<LoadScoreInput>[];
-    readonly scoreBeforeInactivity: number;
-  };
 }
 
 function participant(
   id: string, name: string, hall: GuestHall, daysSinceWash: number | null,
-  visibility: GuestParticipant['visibility'], weightLbs: number,
+  visibility: GuestParticipant['visibility'],
   scrubScore = 0,
 ): GuestParticipant {
-  const loads = Object.freeze(daysSinceWash === null ? [] : [Object.freeze({
-    weightLbs, lintBonus: true, foldBonus: true, washerDelayMinutes: 0,
-    dryerDelayMinutes: 0, loadOrdinal3Days: 1, loads24Hours: 1, scrubScore,
-  })]);
-  const scoreBeforeInactivity = roundScore(loads.reduce((sum, load) => sum + calculateLoadScore(load), 0));
   return Object.freeze({
     id, name, hall, daysSinceWash, visibility,
     tracking: daysSinceWash === null ? 'unknown' : 'current',
@@ -122,24 +62,23 @@ function participant(
     usualDays: Object.freeze(hall === 'Earhart Hall' ? ['Tuesday', 'Saturday'] : hall === 'Harrison Hall' ? ['Wednesday', 'Saturday'] : ['Tuesday', 'Sunday']),
     usualTimeWindow: visibility === 'friends' ? '18:00–20:00' : '17:00–19:00',
     scenarioLabel: 'Synthetic scenario: generated streak, schedule and source label; no verified CSC data',
-    scoreBasis: Object.freeze({ label: 'Simulated completed-load scenario; not source activity or a source score', loads, scoreBeforeInactivity }),
   });
 }
 
 export const GUEST_PARTICIPANTS: readonly GuestParticipant[] = Object.freeze([
-  participant('U001', 'Avery', 'Earhart Hall', 1, 'public', 12, 3),
-  participant('U002', 'Jordan', 'Earhart Hall', 5, 'friends', 10, 2),
-  participant('U003', 'Riley', 'Earhart Hall', 17, 'public', 14),
-  participant('U004', 'Sam', 'Harrison Hall', 2, 'public', 11, 4),
-  participant('U005', 'Casey', 'Harrison Hall', 14, 'friends', 13),
-  participant('U006', 'Morgan', 'Harrison Hall', null, 'private', 0),
-  participant('U007', 'Alex', 'Shreve Hall', 6, 'public', 15, 1),
-  participant('U008', 'Taylor', 'Shreve Hall', 21, 'public', 12),
-  participant('U009', 'Jamie', 'Shreve Hall', 29, 'private', 10),
+  participant('U001', 'Avery', 'Earhart Hall', 1, 'public', 3),
+  participant('U002', 'Jordan', 'Earhart Hall', 5, 'friends', 2),
+  participant('U003', 'Riley', 'Earhart Hall', 17, 'public'),
+  participant('U004', 'Sam', 'Harrison Hall', 2, 'public', 4),
+  participant('U005', 'Casey', 'Harrison Hall', 14, 'friends'),
+  participant('U006', 'Morgan', 'Harrison Hall', null, 'private'),
+  participant('U007', 'Alex', 'Shreve Hall', 6, 'public', 1),
+  participant('U008', 'Taylor', 'Shreve Hall', 21, 'public'),
+  participant('U009', 'Jamie', 'Shreve Hall', 29, 'private'),
 ]);
 
 export interface GuestSearchFilters { query?: string; hall?: string; minDays?: number }
-export type GuestSearchResult = Pick<GuestParticipant, 'id' | 'name' | 'hall' | 'reminderConsent' | 'score' | 'scrubStreak' | 'source' | 'scenarioLabel'> & {
+export type GuestSearchResult = Pick<GuestParticipant, 'id' | 'name' | 'hall' | 'reminderConsent'> & {
   readonly daysSinceWash: number;
   readonly tracking: 'current';
   readonly visibility: 'public' | 'friends';
@@ -156,8 +95,7 @@ export function searchGuestParticipants({ query = '', hall = '', minDays = 14 }:
     if (hallFilter && hallFilter !== 'all' && p.hall.toLowerCase() !== hallFilter) return [];
     if (needle && !`${p.name} ${p.hall}`.toLowerCase().includes(needle)) return [];
     return [{ id: p.id, name: p.name, hall: p.hall, daysSinceWash: p.daysSinceWash,
-      tracking: 'current', visibility: p.visibility, reminderConsent: p.reminderConsent, score: p.score,
-      scrubStreak: p.scrubStreak, source: p.source, scenarioLabel: p.scenarioLabel }];
+      tracking: 'current', visibility: p.visibility, reminderConsent: p.reminderConsent }];
   });
 }
 

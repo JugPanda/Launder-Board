@@ -90,11 +90,17 @@ describe("provider-backed guest demo", () => {
     expect(screen.getByText(/nothing sent to CSC/i)).toBeVisible();
     expect(screen.getByText(/Supabase profile data/i)).toBeVisible();
     expect(screen.getByText("2026-09-07")).toBeVisible();
+    expect(screen.getByText("Record source")).toBeVisible();
+    expect(screen.getByText("Synthetic CSC-format fixture")).toBeVisible();
+    fireEvent.change(screen.getByLabelText("Synthetic profile preview"), { target: { value: "U002" } });
+    expect(screen.getByText("Self-reported demo fixture")).toBeVisible();
     fireEvent.change(screen.getByLabelText("Synthetic profile preview"), { target: { value: "U003" } });
     expect(screen.getByText("32", { selector: "output" })).toBeVisible();
+    expect(screen.getByText("17 days")).toBeVisible();
     fireEvent.click(screen.getByRole("tab", { name: "Search" }));
     await screen.findByRole("heading", { name: "Riley" });
     expect(screen.getByText(/Results from Typesense/i)).toBeVisible();
+    expect(screen.getByText(/one saved nudge per synthetic friend every 72 hours.*five total per day/i)).toBeVisible();
     expect(api).toHaveBeenCalledWith("/api/demo/search?q=&hall=&minDays=14", expect.objectContaining({ credentials: "same-origin", signal: expect.any(AbortSignal) }));
     expect(screen.queryByRole("heading", { name: "Jamie" })).toBeNull();
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "nobody" } });
@@ -159,13 +165,15 @@ describe("provider-backed guest demo", () => {
     fireEvent.change(screen.getByLabelText("Usual time window"), { target: { value: "09:00–11:00" } });
     expect(screen.getByText("No overlapping schedules.")).toBeVisible();
   });
-  it("keeps proof images local and persists private session preset updates", async () => {
+  it("keeps local image previews private and persists private session preset updates", async () => {
     Object.defineProperty(URL, "createObjectURL", { configurable: true, value: vi.fn(() => "blob:local-test") });
     Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: vi.fn() });
     await ready();
     fireEvent.click(screen.getByRole("tab", { name: "Community" }));
     const before = api.mock.calls.length;
-    fireEvent.change(screen.getByLabelText("Choose a local proof image"), { target: { files: [new File(["test"], "laundry.png", { type: "image/png" })] } });
+    expect(screen.getByRole("heading", { name: "Local image preview" })).toBeVisible();
+    expect(screen.queryByText("Proof photo concept")).toBeNull();
+    fireEvent.change(screen.getByLabelText("Choose an image to preview locally"), { target: { files: [new File(["test"], "laundry.png", { type: "image/png" })] } });
     expect(screen.getByRole("img")).toHaveAttribute("src", "blob:local-test");
     expect(screen.getByRole("status")).toHaveTextContent(/no score changes/i);
     expect(api.mock.calls).toHaveLength(before);
@@ -178,5 +186,9 @@ describe("provider-backed guest demo", () => {
     fireEvent.click(screen.getByRole("tab", { name: "Community" }));
     expect(screen.getByText(/Laundry day is better together!/)).toBeVisible();
     expect(screen.getByRole("button", { name: "Update saved to this session" })).toBeDisabled();
+  });
+  it("labels the horizontally scrollable mobile tab navigation", async () => {
+    await ready();
+    expect(screen.getByText(/swipe tabs to explore all five sections/i)).toBeVisible();
   });
 });

@@ -81,10 +81,10 @@ describe("auth configuration boundary", () => {
     expect(container.querySelector("form")).toBeNull();
     expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute("href", "/demo");
   });
-  it("uses a public demo when private demo routes are disabled", async () => {
+  it("keeps the current public demo available when the feature flag is disabled", async () => {
     vi.stubEnv("LAUNDER_BOARD_DEMO_MODE", "disabled");
     render(await SignInPage({ searchParams: Promise.resolve({}) }));
-    expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute("href", "/leaderboards/fall-weekly-quest");
+    expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute("href", "/demo");
   });
   it.each(["sign-in", "sign-up"])("blocks unconfigured %s before provider initialization", async (intent) => {
     const response = await POST(request(intent));

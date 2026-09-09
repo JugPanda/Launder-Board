@@ -28,7 +28,7 @@ export async function searchParticipants(filters: SearchFilters) {
   const roster = ids.flatMap(id => {
     const p = current.get(id);
     if (!p || p.daysSinceWash === null || p.daysSinceWash < filters.minDays || (filters.hall && filters.hall !== 'all' && p.hall !== filters.hall)) return [];
-    return [p];
+    return [{ id: p.id, name: p.name, hall: p.hall, daysSinceWash: p.daysSinceWash }];
   });
   return { participants: roster, source: 'typesense', returnedCount: roster.length };
 }

@@ -27,8 +27,13 @@ test("guest route only opens its scoped demo session, never collects account det
   expect(writes.every(url => new URL(url).pathname === "/api/demo/session")).toBe(true);
 });
 
-test("old guest entry points route to the current product", async ({ page }) => {
-  for (const route of ["/sign-in", "/dashboard", "/activity/new", "/friends", "/leaderboards/fall-weekly-quest"]) {
+test("presentation sign-in stays available while archived app routes open the demo", async ({ page }) => {
+  await page.goto("/sign-in");
+  await expect(page).toHaveURL(/\/sign-in$/);
+  await expect(page.getByRole("heading", { name: "Demo account sign in" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /explore the public demo/i })).toHaveAttribute("href", "/demo");
+
+  for (const route of ["/dashboard", "/activity/new", "/friends", "/leaderboards/fall-weekly-quest"]) {
     await page.goto(route);
     await expect(page).toHaveURL(/\/demo$/);
   }

@@ -11,6 +11,13 @@ it('introduces the actual creators with the supplied uncropped laundry-room phot
   expect(photo).toHaveAttribute('height', '960');
   expect(photo.getAttribute('src')).toContain('laundrostat-creators');
   expect(photo).toHaveClass('h-auto');
+  expect(screen.getByText(/Marcus Withers.*Eddie Wuerthele.*Rupika Chakka.*Pritham Singh/)).toBeVisible();
+  expect(screen.getByRole('link', { name: /view the LaundroStat code on GitHub/i })).toHaveAttribute(
+    'href',
+    'https://github.com/JugPanda/Launder-Board',
+  );
+  expect(screen.getByRole('link', { name: /presentation account sign in/i })).toHaveAttribute('href', '/sign-in');
+  expect(screen.getByText(/provided credentials/i)).toBeVisible();
 });
 it.each(['GuestDemo', 'SquadRankings'])('%s uses a readable small-text floor, including mobile overrides', (name) => {
   const css = readFileSync(`components/guest-demo/${name}.module.css`, 'utf8');

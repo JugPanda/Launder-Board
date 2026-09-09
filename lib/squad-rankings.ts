@@ -15,6 +15,22 @@ export function getLaundryStatus(score: number | null) {
 
 export type SquadPlayer = GuestParticipant & { score: number; rank: number };
 
+export type HallStanding = {
+  name: string;
+  count: number;
+  sum: number;
+  average: number;
+};
+
+/** Competition ranking: tied averages share a rank and the next rank is skipped. */
+export function rankHallStandings(standings: readonly HallStanding[]) {
+  const sorted = [...standings].sort((a, b) => b.average - a.average || a.name.localeCompare(b.name));
+  return sorted.map((standing) => ({
+    ...standing,
+    rank: sorted.findIndex((candidate) => candidate.average === standing.average) + 1,
+  }));
+}
+
 /** Two non-overlapping ends of the explicitly consenting synthetic cohort. */
 export function getSquadRankings(participants: readonly GuestParticipant[]) {
   const eligible = participants.filter((p): p is GuestParticipant & { score: number } =>

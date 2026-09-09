@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GUEST_PARTICIPANTS } from "@/lib/guest-demo";
-import { getSquadRankings, getLaundryStatus } from "@/lib/squad-rankings";
+import { getSquadRankings, getLaundryStatus, rankHallStandings } from "@/lib/squad-rankings";
 describe("two distinct user squads", () => {
   it("shows highest and lowest scores separately and preserves score ties", () => {
     const { squeaky, stinky } = getSquadRankings(GUEST_PARTICIPANTS);
@@ -29,5 +29,19 @@ describe("supplied status artwork", () => {
   });
   it("never assigns a dirty status to unknown or invalid tracking", () => {
     for (const score of [null, NaN, -1, 101]) expect(getLaundryStatus(score)).toBeNull();
+  });
+});
+
+describe("Dorm Wars ranking", () => {
+  it("assigns the same competition rank to equal hall averages", () => {
+    expect(rankHallStandings([
+      { name: "Earhart Hall", count: 2, sum: 180, average: 90 },
+      { name: "Harrison Hall", count: 2, sum: 180, average: 90 },
+      { name: "Shreve Hall", count: 2, sum: 120, average: 60 },
+    ]).map(({ name, rank }) => [name, rank])).toEqual([
+      ["Earhart Hall", 1],
+      ["Harrison Hall", 1],
+      ["Shreve Hall", 3],
+    ]);
   });
 });
