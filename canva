@@ -1,11 +1,50 @@
 https://canva.link/rzrtnq7iygkdhqg
 
-# LaundroStat presentation source
 
-The complete, current slide-by-slide replacement copy is maintained in:
+Here's a solid structure for a hackathon pitch (aim for 8-10 min, ~10-12 slides):
 
-- `docs/laundrostat-canva-update-brief.md`
+**1. Title slide**
+App name, tagline (something punchy like "Peer pressure for clean clothes"), team names.
 
-Use the brief when updating the 14-slide Canva presentation. It reflects the live product at https://laundrostat.vercel.app/demo and supersedes the earlier weight/load-scoring, QR/sensor, public-chat, and shame-based pitch language.
+**2. The Hook / Problem**
+Open with something relatable and slightly funny — "You know that roommate who hasn't washed in 3 weeks?" Then pivot to the real problem: no easy way to build laundry habits, and no fun social layer around a mundane chore. Judges remember a strong hook.
 
-Do not present unsupported features as shipped. The current showcase is a Supabase- and Typesense-backed synthetic demo of Clean-O-Meter recency/consistency, consenting friend search and preset nudges, Wash Mate schedule matching, Squeaky/Stinky Squads, Dorm Wars, and isolated saved demo actions. It has no live CSC integration, machine sensor, load-weight measurement, cycle verification, or uploaded proof.
+**3. The Idea (one sentence)**
+"[App name] turns laundry into a game — track your habits, compete with your dorm, and call out your friends (nicely) when they're slacking." Keep this slide dead simple — one line, maybe a hero mockup image.
+
+**4. How It Works (user flow)**
+Walk through the core loop: check in at a machine (QR scan) → sensor/timer verifies a real wash → logs to your profile → visible on friend group / hall leaderboard. Use a simple flow diagram, not paragraphs.
+
+**5. Key Features**
+- Streaks & personal tracking
+- Friend accountability / nudges
+- Hall vs. hall competitions
+- Anti-cheat verification (sensor + check-in binding)
+Bullet these with a small icon each, not dense text.
+
+**6. Technical Architecture**
+Since you don't have CSC API access, this is where you explain your actual approach honestly and confidently: QR check-in + IoT vibration sensor for verified wash detection, load-size estimation from vibration signature, backend for streaks/leaderboards. A simple architecture diagram (phone → QR → sensor → backend → leaderboard) works great here — I can help you generate one.
+
+**7. Live Demo**
+Just a slide that says "Demo" — this is where you actually show the app / sensor working. Don't put much text here, it's a placeholder for you talking.
+
+**8. Privacy & Consent Design**
+This is worth its own slide, and it'll actually impress judges: explain that participation is opt-in, individual data isn't shamed publicly, only aggregate hall stats are public by default, and users control their own visibility. Shows maturity beyond "we hacked something together."
+
+**9. Why This, Not [Alternative]**
+Briefly address why you went self-built sensor + check-in instead of trying to integrate with CSC — frames the CSC limitation as a design decision, not a blocker. Confident reframing here.
+
+**10. What's Next / Scaling**
+More machines wired, potential partnership conversation with CSC or housing office, mobile push notifications, maybe integrating with campus ID systems for auth.
+
+**11. Team / Thank You**
+Quick team slide, contact/GitHub link.
+
+**Formatting tips:**
+- **One idea per slide.** If you're writing full sentences, cut it down to a phrase + you narrate the rest.
+- **Visuals over bullets** wherever possible — the flow diagram and architecture diagram carry more weight than text lists.
+- **Consistent color scheme** tied to your app's actual UI (if your app is blue/green, theme the whole deck that way — makes it feel like one product, not a random deck).
+- **Big fonts** — hackathon rooms are often laptop screens on a projector; assume the back row can't read anything under ~28pt.
+- **Save the technical deep-dive for Q&A**, not slides — judges will ask if they want detail.
+
+Want me to actually build this out as a PowerPoint file with a clean visual theme, or would you rather I just help you tighten the content first?
