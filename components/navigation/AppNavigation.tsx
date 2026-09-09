@@ -34,7 +34,7 @@ export function AppNavigation({ active }: { active: AppDestination }) {
     <>
       <aside className="hidden border-r border-line bg-white/85 px-4 py-7 lg:sticky lg:top-12 lg:flex lg:h-[calc(100vh-3rem)] lg:flex-col" aria-label="App navigation">
         <Link className="mb-9 inline-flex min-h-11 items-center px-3 text-xl font-black tracking-[-0.05em] text-accent" href="/dashboard">
-          pay2win
+          Launder Board
         </Link>
         <nav className="space-y-1" aria-label="Primary">
           {destinations.map((item) => <NavItem key={item.id} active={active} item={item} />)}

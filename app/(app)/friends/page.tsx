@@ -74,8 +74,8 @@ export default function FriendsPage() {
           ) : null}
         </section>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,.8fr)] lg:items-start">
-          <section aria-labelledby="due-heading" className="rounded-3xl border border-line bg-white p-5 shadow-[0_18px_60px_rgb(15_23_42_/_6%)] sm:p-7">
+        <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,.8fr)] lg:items-start">
+          <section aria-labelledby="due-heading" className="min-w-0 rounded-3xl border border-line bg-white p-5 shadow-[0_18px_60px_rgb(15_23_42_/_6%)] sm:p-7">
             <div className="flex items-center gap-3">
               <Clock3 aria-hidden="true" className="text-accent" />
               <div>
@@ -83,18 +83,18 @@ export default function FriendsPage() {
                 <p className="mt-1 text-sm text-slate-600">Rechecked against current consent, friendship, tracking, mute, and block state.</p>
               </div>
             </div>
-            <article className="mt-5 rounded-2xl border border-line p-4 sm:p-5">
+            <article className="mt-5 min-w-0 rounded-2xl border border-line p-4 sm:p-5">
               <div className="mb-4">
                 <p className="font-black">Noah R.</p>
                 <p className="mt-1 text-sm font-bold text-slate-700">No recorded wash in the last 14 days.</p>
-                <p className="mt-1 text-xs text-slate-500">Based on activity shared with pay2win. Accepted friend.</p>
+                <p className="mt-1 text-xs text-slate-500">Based on activity shared with Launder Board. Accepted friend.</p>
               </div>
               <EncourageButton demoMode recipientId={NOAH_ID} recipientName="Noah R." />
             </article>
             <p className="mt-4 text-xs leading-5 text-slate-500">Unknown, partial, or stale tracking is never treated as due. This is not a claim about anyone’s real-world laundry.</p>
           </section>
 
-          <div className="grid gap-6">
+          <div className="grid min-w-0 gap-6">
             <section aria-labelledby="requests-heading" className="rounded-3xl border border-line bg-white p-5 shadow-sm">
               <div className="flex items-center gap-2">
                 <Users aria-hidden="true" className="text-accent" size={21} />

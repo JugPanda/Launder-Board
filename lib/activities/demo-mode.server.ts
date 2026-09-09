@@ -4,5 +4,5 @@ import "server-only";
 export function isSyntheticDemoModeEnabled(
   environment: Record<string, string | undefined> = process.env,
 ): boolean {
-  return environment.PAY2WIN_DEMO_MODE === "enabled";
+  return environment.LAUNDER_BOARD_DEMO_MODE === "enabled";
 }

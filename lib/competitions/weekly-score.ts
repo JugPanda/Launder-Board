@@ -1,4 +1,4 @@
-export const COMPETITION_TIME_ZONE = "America/New_York";
+export const COMPETITION_TIME_ZONE = "America/Indiana/Indianapolis";
 export const LATE_IMPORT_WINDOW_HOURS = 72;
 export const MAX_CREDITED_SESSION_PARTICIPANTS = 2;
 

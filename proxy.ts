@@ -4,7 +4,13 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getPublicSupabaseEnv } from "@/lib/supabase/env";
 
 const NO_STORE = "private, no-store";
-const PUBLIC_PATHS = new Set(["/", "/sign-in", "/sign-in/actions"]);
+const PUBLIC_PATHS = new Set([
+  "/",
+  "/sign-in",
+  "/sign-in/actions",
+  "/api/internal/search-index",
+  "/purdue/halls",
+]);
 const PUBLIC_PREFIXES = ["/leaderboards/", "/p/", "/api/public/"];
 const DEMO_PREFIXES = [
   "/dashboard",
@@ -42,7 +48,7 @@ export async function proxy(request: NextRequest) {
     PUBLIC_PATHS.has(pathname) ||
     PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
   const isDemo =
-    process.env.PAY2WIN_DEMO_MODE === "enabled" &&
+    process.env.LAUNDER_BOARD_DEMO_MODE === "enabled" &&
     DEMO_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix));
   const isApi = pathname.startsWith("/api/");
 

@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 sm:px-8 lg:px-12">
       <nav className="flex min-h-11 items-center justify-between" aria-label="Primary navigation">
-        <span className="text-xl font-black tracking-[-0.04em] text-accent">pay2win</span>
+        <span className="text-xl font-black tracking-[-0.04em] text-accent">Launder Board</span>
         <a
           className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-5 text-sm font-bold transition-colors hover:border-accent hover:text-accent motion-reduce:transition-none"
           href="#how-it-works"
@@ -38,7 +38,7 @@ export default function HomePage() {
       <section className="flex flex-1 flex-col justify-center py-20 sm:py-28">
         <div className="max-w-4xl">
           <p className="mb-5 font-mono text-sm font-bold uppercase tracking-[0.18em] text-accent">
-            Weekly quest · fair by design
+            Purdue-focused student hackathon project
           </p>
           <h1 className="text-balance text-5xl font-black leading-[0.98] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
             {"Win your hall's weekly laundry challenge—without wasting loads."}
@@ -46,6 +46,10 @@ export default function HomePage() {
           <p className="mt-7 max-w-2xl text-pretty text-lg leading-8 text-muted sm:text-xl">
             Join voluntarily, record a qualifying wash, and earn one participation credit per week.
             Paying more never buys more points.
+          </p>
+          <p className="mt-4 max-w-2xl leading-7 text-muted">
+            Designed for voluntary participation at Purdue University West Lafayette.
+            Maple, River, and Oak are fictional demo halls; their standings are not Purdue data.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -60,6 +64,9 @@ export default function HomePage() {
             >
               See the weekly rules
             </a>
+            <Link className="inline-flex min-h-11 items-center justify-center px-4 font-bold text-accent underline underline-offset-4" href="/purdue/halls">
+              Explore Purdue residence halls
+            </Link>
           </div>
         </div>
       </section>
@@ -85,6 +92,10 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      <footer className="border-t border-line py-8 text-sm leading-6 text-muted">
+        Launder Board is not affiliated with or endorsed by Purdue University, University Residences, CSC ServiceWorks, CSCPay, or Typesense.
+        No university logos, student directory, or live laundry-provider data are used.
+      </footer>
     </main>
   );
 }

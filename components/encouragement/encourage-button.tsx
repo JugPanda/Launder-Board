@@ -101,12 +101,12 @@ export function EncourageButton({
   const unavailable = state === "sending" || state === "sent" || state === "muted" || state === "blocked";
 
   return (
-    <div className="rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
-      <label className="grid gap-2 text-sm font-black text-slate-900">
+    <div className="min-w-0 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4">
+      <label className="grid min-w-0 gap-2 text-sm font-black text-slate-900">
         Encouragement preset
         <select
           aria-label={`Encouragement for ${recipientName}`}
-          className="min-h-11 rounded-xl border border-line bg-white px-3 font-normal"
+          className="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-white px-3 font-normal"
           disabled={unavailable}
           onChange={(event) => setPresetKey(event.target.value as EncouragementPresetKey)}
           value={presetKey}
