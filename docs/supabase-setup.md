@@ -1,5 +1,7 @@
 # Secure hosted Supabase setup
 
+> **Deferred for the current guest release.** `/demo` needs no Supabase or sign-in. With the showcase flag enabled, `/sign-in` redirects to `/demo`. The instructions below describe retained authentication infrastructure for later real-user work, not tonight's demo.
+
 ## What this enables—and what it does not
 
 A deployment with only `LAUNDER_BOARD_DEMO_MODE=enabled` has no hosted authentication. `/sign-in` deliberately shows **Account setup pending**, not a credential form. Its demo link does not create an account. Missing or invalid public Supabase configuration makes POST `/sign-in/actions` redirect safely (303, private/no-store) before initializing the provider. Provider failures return generic errors; they are not successful authentication.

@@ -1,88 +1,56 @@
 # LaundroStat
 
-Purdue University West Lafayette-focused student hackathon project. Not affiliated with or endorsed by Purdue or University Residences.
+A sign-in-free, synthetic laundry social demo for Purdue University West Lafayette: **Clean-O-Meter, consenting-friend search, Wash Mate matching, Stinky Squad, and Dorm Wars**.
 
-- [Purdue housing scope and source review](docs/purdue-context.md)
-- [Hosted Supabase setup and sign-in troubleshooting](docs/supabase-setup.md)
-- `/purdue/halls` contains real housing metadata only; demo standings remain fictional.
+**Live:** https://launderboard.vercel.app · **Demo:** https://launderboard.vercel.app/demo
 
-A privacy-first, mobile-friendly residence-hall laundry challenge built for a short hackathon. Participants voluntarily record laundry activity, encourage consenting friends, and help their hall through one normalized weekly participation credit.
+> Every participant, activity, score, schedule, relationship, and hall standing is synthetic. Real hall names do not make the standings Purdue data. No live CSC/payment, machine-code, weight, removal-time, photo-proof, or refund/error verification exists.
 
-> **Demo data:** Every included person, competition hall, invite, and activity record is synthetic. The separate Purdue housing catalog contains source-linked public metadata, not standings. The MVP does not claim a live CSC integration or university partnership.
+## Current product
 
-## Product promise
+- Clean-O-Meter measures a disclosed demonstration model of recorded wash recency and consistency—not hygiene, load volume, or one weekly credit.
+- Search consenting synthetic friends with no recorded completed wash in a selected period.
+- Match usual laundry days and time windows to find a Wash Mate.
+- Explore recency/consistency user scores and normalized synthetic hall averages.
+- Try browser-only community/proof concepts. Nothing is sent to another person or laundry provider.
+- No login or hosted credentials are needed for the guest experience.
 
-**Win your hall's weekly laundry challenge—without wasting loads.**
+The team's current correction supersedes the old weekly-credit implementation and the earlier weight-based scoring draft. See [current product rules](docs/product-rules.md) and [demo script](docs/demo-script.md).
 
-- One qualifying washer session earns one weekly credit.
-- Additional loads, spending, duration, and load size earn no extra points.
-- Hall standings use credited participants divided by the locked eligible roster.
-- Profiles, directory discovery, reminders, imports, and public sharing are private/off by default and independently revocable.
-- Search results describe only activity shared with LaundroStat: “No recorded wash in the last 14 days,” never a claim about a person's hygiene.
+## Source and scope
 
-## Locked MVP
+- [Team brief](https://docs.google.com/document/d/17KNrH98GEM0szQTWxbTPI2htfALo0jcbCF9AYqk9_Tg/edit)
+- [Presentation](https://canva.link/rzrtnq7iygkdhqg)
+- [Purdue metadata and sources](docs/purdue-context.md)
+- `/purdue/halls` has sourced housing metadata, not enrollment or standings.
 
-- One fictional campus with Maple, River, and Oak halls.
-- Eighteen synthetic participants, six per hall.
-- Monday-to-Monday competition weeks in `America/Indiana/Indianapolis`.
-- Minimum five-person eligible roster for public ranking.
-- Seventy-two-hour late-import window.
-- At most two credited participants on an accepted shared session.
-- Manual, user-file, and visibly simulated activity adapters.
-- Disabled CSC adapter until written authorization and official credentials exist.
-- Typesense-powered, server-mediated participant and hall search.
-- In-app preset encouragement only; no free-text, SMS, email, or push.
+Not affiliated with or endorsed by Purdue, University Residences, CSC ServiceWorks, CSCPay, or Typesense. No official logos or live university integration.
 
-See [docs/product-rules.md](docs/product-rules.md) for the normative product and privacy rules.
-
-## Stack
-
-- Next.js 16 App Router, React 19, TypeScript, Tailwind CSS
-- Supabase Auth, PostgreSQL, Storage, and RLS
-- Typesense 30.2
-- Zod, Vitest, Playwright
-- Vercel
-
-## Local setup
+## Run the guest demo
 
 ```bash
-npm install
-cp .env.example .env.local
-npx supabase start
-docker run --rm -p 8108:8108 typesense/typesense:30.2 \
-  --data-dir /tmp/typesense-data \
-  --api-key=launder-board-local-dev-key \
-  --enable-cors=false
-npm run dev
+npm ci
+LAUNDER_BOARD_DEMO_MODE=enabled npm run dev
 ```
 
-Copy the local Supabase values printed by `supabase start` into `.env.local`. Use the Typesense local key only for local development.
+Open `/demo`. The deployment flag redirects earlier demo/sign-in entry points to the current guest experience. `/demo` itself works without provider configuration. Do not put real participant data in the guest interface.
 
 ## Verification
 
 ```bash
 npm run lint
 npm run typecheck
-npm test
+npm test -- --maxWorkers=1
 npm run build
 npm run test:e2e
 ```
 
-## Demo path
+## Backend status
 
-1. Open the synthetic demo as Maya Quest.
-2. Show the one-credit weekly rule and source labels.
-3. Search consenting accepted friends with no recorded wash in 14 days.
-4. Send one preset encouragement and show the 72-hour cooldown.
-5. Import the synthetic CSV; preview a new washer row, duplicate, and refunded row.
-6. Show that a second washer session adds no extra weekly credit.
-7. Confirm Maple's normalized result updates.
-8. Disable public sharing and verify the public profile disappears immediately.
+Next.js 16, React 19, TypeScript, Tailwind, Vitest, and Playwright power the current guest demo. Supabase/PostgreSQL/RLS and Typesense integrations exist in the legacy backend, but the guest simulation does not claim to use live provider data. The legacy weekly scoring schema is not the current user-facing game. No database migration is needed for this guest release.
 
-## Explicitly deferred
+[Supabase setup](docs/supabase-setup.md) is retained for later real-user work, not a requirement for tonight's demo. Do not seed or reset a hosted production database. Real-user wiring for the current model must be implemented and tested before launch to residents.
 
-Live CSCPay/CSC GO sync, university SSO/directory imports, native mobile apps, external notifications, free-text messaging, photo or load-size estimation, spending/load-count leaderboards, material prizes, and conversational RAG.
+## Delivery
 
-## Repository workflow
-
-Development uses verified, focused commits pushed directly to `main`. Never commit credentials, real student records, private account statements, or unlabeled synthetic fallbacks. Read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.
+Use focused, verified commits directly on `main`; do not create branches or PRs unless explicitly requested. Preserve teammates' commits and never force-push. See [CONTRIBUTING.md](CONTRIBUTING.md).

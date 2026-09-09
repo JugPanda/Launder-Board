@@ -1,6 +1,10 @@
 # LaundroStat design system
 
-## Direction
+## Current guest release
+
+The current `/` and `/demo` use warm off-white, charcoal, and gold accents with washer-circle motifs. The hero centers Clean-O-Meter, consenting-friend search, Wash Mates, and recency/consistency competition. No official Purdue marks. Keep synthetic disclosure persistent and avoid unsupported hygiene/provider claims. The remaining tokens below describe legacy screens, not the current guest product.
+
+## Legacy direction
 
 Clean utility with restrained arcade-score energy. Use the exact capitalization `LaundroStat`, washer-door circles, and concise quest language. No portraits, stock imagery, podium/loser imagery, public shame, or red downward-rank indicators. The first viewport states: **Paying more never buys more points.**
 

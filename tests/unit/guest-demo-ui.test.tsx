@@ -1,0 +1,60 @@
+import { fireEvent, render, screen, cleanup } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import GuestDemo from "@/components/guest-demo/GuestDemo";
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
+describe("guest recency demo", () => {
+  it("shows a recency profile, then searches consenting current synthetic friends", () => {
+    render(<GuestDemo />);
+    expect(screen.getByText(/nothing sent to CSC/i)).toBeVisible();
+    expect(screen.getByRole("heading", { name: /meet your clean-o-meter/i })).toBeVisible();
+    expect(screen.getByText("2026-09-07")).toBeVisible();
+    fireEvent.change(screen.getByLabelText("Synthetic profile preview"), { target: { value: "U003" } });
+    expect(screen.getByText("2026-08-22")).toBeVisible();
+    expect(screen.getByText("32", { selector: "output" })).toBeVisible();
+    fireEvent.click(screen.getByRole("tab", { name: "Search" }));
+    expect(screen.getByRole("heading", { name: "Riley" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Casey" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Jamie" })).toBeNull();
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "nobody" } });
+    expect(screen.getByText(/no matches/i)).toBeVisible();
+  });
+  it("supports local nudge cooldown, reset, and eligible roster leaderboards", () => {
+    render(<GuestDemo />);
+    fireEvent.click(screen.getByRole("tab", { name: "Search" }));
+    fireEvent.click(screen.getAllByRole("button", { name: /preview nudge/i })[0]);
+    expect(screen.getByRole("status")).toHaveTextContent(/no message sent/i);
+    expect(screen.getByRole("button", { name: /cooldown/i })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: /reset demo/i }));
+    expect(screen.queryByRole("button", { name: /cooldown/i })).toBeNull();
+    fireEvent.click(screen.getByRole("tab", { name: "Leaderboards" }));
+    expect(screen.getByText(/not hall population/i)).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Stinky Squad" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "Morgan" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Jamie" })).toBeNull();
+  });
+  it("matches schedules without self-matches and supports keyboard tabs", () => {
+    render(<GuestDemo />);
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Overview" }), { key: "ArrowRight" });
+    expect(screen.getByRole("tab", { name: "Search" })).toHaveAttribute("aria-selected", "true");
+    fireEvent.click(screen.getByRole("tab", { name: "Wash Mates" }));
+    expect(screen.getByRole("heading", { name: "Alex" })).toBeVisible();
+    fireEvent.change(screen.getByLabelText("Usual laundry day"), { target: { value: "Tuesday" } });
+    expect(screen.queryByRole("heading", { name: "Avery" })).toBeNull();
+    fireEvent.change(screen.getByLabelText("Usual time window"), { target: { value: "09:00–11:00" } });
+    expect(screen.getByText("No overlapping schedules.")).toBeVisible();
+  });
+  it("previews a local image, revokes its URL, and never awards a score", () => {
+    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: vi.fn(() => "blob:local-test") });
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: vi.fn() });
+    render(<GuestDemo />);
+    fireEvent.click(screen.getByRole("tab", { name: "Community" }));
+    fireEvent.change(screen.getByLabelText("Choose a local proof image"), { target: { files: [new File(["test"], "laundry.png", { type: "image/png" })] } });
+    expect(screen.getByRole("img")).toHaveAttribute("src", "blob:local-test");
+    expect(screen.getByRole("status")).toHaveTextContent(/no score changes/i);
+    fireEvent.click(screen.getByRole("button", { name: "Remove local image" }));
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:local-test");
+    expect(screen.queryByRole("img")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Preview a fresh-start update" }));
+    expect(screen.getByRole("status")).toHaveTextContent(/nothing published/i);
+  });
+});

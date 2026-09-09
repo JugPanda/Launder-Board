@@ -12,9 +12,9 @@ describe("synthetic demo experience", () => {
 
     expect(screen.getByRole("link", { name: /view synthetic demo/i })).toHaveAttribute(
       "href",
-      "/dashboard",
+      "/demo",
     );
-    expect(screen.getByText(/paying more never buys more points/i)).toBeVisible();
+    expect(screen.getByText(/no account needed/i)).toBeVisible();
   });
 
   it("keeps the synthetic boundary and weekly cap visible on Maya's dashboard", () => {

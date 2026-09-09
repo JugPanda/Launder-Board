@@ -1,113 +1,33 @@
-# LaundroStat MVP product rules
+# LaundroStat — current guest-demo rules
 
-This document is normative for the hackathon MVP.
+## Release decision
 
-## Demo boundary
+The current product is a **recency/consistency-based laundry social demo**, per the team's latest correction. It is **not** the earlier one-credit weekly challenge and does not reward number of loads. The Google Doc's earlier weight-based points draft is not the current scoring authority either.
 
-- All bundled competition halls, profiles, invites, relationships, and activities are synthetic.
-- The separate Purdue West Lafayette housing catalog contains sourced public metadata only, never synthetic scores or verified residency claims. See `docs/purdue-context.md`.
-- Every demo screen retains a visible **Synthetic demo** label.
-- Simulated data is never presented as CSC- or university-confirmed.
-- `CscLaundryProvider` remains disabled and returns `provider_not_configured` until an approved integration contract exists.
-- The product processes no laundry payments and sells no score advantage.
+Current source brief: https://docs.google.com/document/d/17KNrH98GEM0szQTWxbTPI2htfALo0jcbCF9AYqk9_Tg/edit
 
-## Competition
+## Guest experience
 
-- Timezone: `America/Indiana/Indianapolis`.
-- Week: Monday 00:00 inclusive through the following Monday 00:00 exclusive.
-- A participant earns at most one active weekly credit from an accepted qualifying washer session.
-- Dryer-only, failed, refunded, retracted, and duplicate activities do not qualify.
-- Additional cycles, price, duration, or self-reported size never increase score.
-- Hall score: `100 × unique credited participants / locked eligible participants`.
-- Rank ties remain shared; no consumption-based tie-breaker.
-- A hall needs at least five locked eligible participants to appear publicly.
-- Competition enrollment snapshots hall and eligibility before the weekly boundary.
-- Paused participants set before lock are excluded from the denominator.
-- Imports up to 72 hours after week close may recompute that week's result and are labeled as late updates.
-- Shared sessions require invite acceptance, allow at most two credited participants, and consume each participant's own weekly cap.
+- `/demo` is accessible without sign-in, Supabase, or Typesense.
+- Show Clean-O-Meter, last recorded completed cycle, days since wash, scrub streak, and source credibility.
+- Search a consenting synthetic friend group by name, residence hall, and days without a recorded completed wash.
+- Match Wash Mates by overlapping usual laundry days and time windows. These are synthetic coarse schedules, not observed location data.
+- Show the playful Stinky Squad user board and Dorm Wars hall averages using recency/consistency, never load count or weekly credits.
+- Community updates and proof concepts are browser-only simulations. No messages or photographs are uploaded to a provider.
+- The exact Clean-O-Meter formula and invented streak/schedule examples must be labeled as demonstration assumptions, not clinically meaningful hygiene measurements.
+- Unknown or incomplete tracking is not ranked or treated as due.
+- Hall denominators represent the disclosed synthetic participating sample, never official building population. Real Purdue names plus synthetic scores retain persistent disclosure.
 
-## Participation and consent
+## Consent and truthfulness
 
-Defaults are private/off. These choices are separate and independently revocable:
+Every person, score, schedule, friendship, and activity is synthetic. Public display does not imply reminder consent. The fictional viewer's friend/reminder consent is an explicit scenario assumption. Private fixtures remain absent from search and user leaderboards. Use “No recorded wash,” not a claim that someone has not washed. The requested Stinky Squad label is playful game branding, not a factual judgment about a person.
 
-1. account and competition participation;
-2. activity import;
-3. directory discovery;
-4. reminders/encouragement audience;
-5. public participant statistics;
-6. public hall affiliation.
+CSC/payment, machine-code, weight, removal-time, photo-proof, and refund/error checks are **simulated**. No live CSC/CSCPay access, measured weight, actual cycle completion, real photo verification, or university verification is claimed. Do not request provider passwords or import real student data. Do not attach money, housing privileges, or discipline to standings.
 
-Public visibility is not consent to reminders. Nonparticipants never appear in search, due calculations, or scores.
+The public Purdue housing directory is separately sourced metadata. It is not an enrollment list or official university partnership.
 
-## Visibility
+## Security boundary and legacy code
 
-- **Private:** owner only.
-- **Friends-only:** accepted friends may discover selected coarse fields; reminder state requires reminder opt-in and current tracking.
-- **Public:** only specifically selected public fields are anonymous-viewable; due/reminder state is never public.
+The existing authenticated APIs, PostgreSQL RLS, and provider adapters remain protected and are not used by the guest simulator. No auth bypass is added to private APIs. The earlier weekly scoring backend is retained as legacy code only; **it is not the current demo product**. With the public demo deployment enabled, older demo and sign-in GET routes redirect to `/demo` rather than exposing contradictory weekly-cap screens.
 
-Allowed public participant fields: chosen display name, optional hall, weekly points, badges, and coarse active-week summaries.
-
-Never public: email, room, account/provider identifiers, receipts, prices, exact machine/location, exact activity timestamps, friend graph, reports, evidence records, or reminder/due state.
-
-Withdrawal updates PostgreSQL first. All server responses immediately deny the old view even if a Typesense deletion is delayed.
-
-## Activity provenance
-
-Every activity displays one of:
-
-- **Self-reported** — entered manually.
-- **User-supplied record** — normalized from a participant's file; authenticity is not guaranteed.
-- **Simulated CSC-format demo** — synthetic and unmistakably demo-only.
-- **Provider-confirmed** — reserved for a future approved provider response.
-
-Uploaded files are private, deleted synchronously after successful normalization when practical, and have a cleanup backstop no later than 24 hours. Normalized fields follow the participant's consent.
-
-## Tracking language
-
-Use:
-
-- “No recorded wash in the last 14 days.”
-- “Based on activity shared with LaundroStat.”
-- “Tracking is incomplete; reminder status unavailable.”
-- “Simulated CSC-format demo record.”
-
-Never claim a person has not washed, use hygiene insults, publicly shame inactivity, or infer load size from payment, scans, cycle length, capacity, or photos.
-
-Unknown, partial, or stale tracking never makes a participant due and never creates a penalty.
-
-## Friends and encouragement
-
-- Friend requests target only currently discoverable participating profiles.
-- Due-reminder search includes only accepted friends, or explicit same-hall encouragement opt-ins.
-- Block state wins over search and delivery in both directions.
-- Messages use an approved preset; free text is not accepted.
-- Per sender/recipient pair: one message per 72 hours.
-- Per sender: five messages per rolling day.
-- No bulk sends.
-- Recipients can mute, block, and report.
-- Reports and moderation signals remain private.
-
-Approved examples:
-
-- “Laundry quest this week? You've got this.”
-- “Want to team up for a shared load?”
-- “Our hall could use one more participation point—no pressure.”
-
-## Search and authorization
-
-PostgreSQL is authoritative. Typesense is a minimized search projection, never the security boundary.
-
-For private participant search:
-
-1. authenticate the caller;
-2. derive currently authorized IDs from PostgreSQL;
-3. include those IDs in the Typesense filter before searching;
-4. rehydrate hits through the same current PostgreSQL policy;
-5. preserve Typesense order while dropping stale/unauthorized hits;
-6. return allowlisted DTOs and `returned_count` only.
-
-Do not return raw Typesense documents, `out_of`, collection totals, private facets, request parameters, or global query analytics. Index only coarse day-boundary timestamps required for filtering and a monotonic projection version. A withdrawn/deleted entity resolves only to deletion and cannot be resurrected by an older outbox job.
-
-## Low-stakes limitation
-
-A participant can fabricate one weekly self-report. The MVP accepts this bounded limitation because eliminating it requires approved provider telemetry or hardware. Do not attach cash, housing privileges, discipline, or other material consequences to these standings.
+Real-user authentication, backend persistence for the new model, approved provider integration, and production-ready photo validation are deferred. Do not onboard real residents into this guest demonstration.

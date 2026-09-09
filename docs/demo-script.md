@@ -1,61 +1,19 @@
 # Two-minute LaundroStat demo
 
-Use only bundled synthetic fixtures. Keep the **Synthetic demo** banner visible throughout.
+Open https://launderboard.vercel.app/demo. No sign-in needed. Keep the synthetic disclosure visible. Dates are a fixed September 8, 2026 scenario, not live monitoring.
 
-## 0:00–0:15 — Promise and fairness
+1. **Clean-O-Meter:** show the selected synthetic participant's recorded completed cycle, days since wash, scrub streak, and source credibility. Explain the disclosed recency/consistency model. Additional loads do not buy score.
+2. **Friend search:** select a 14-day period, then filter by hall/name. Explain that unknown/private/nonconsenting fixtures are not exposed. Send a preset encouragement and show its browser-only cooldown; no real message is delivered.
+3. **Wash Mates:** select a usual laundry day/time window. Show the overlapping schedule explanation. These are synthetic availability preferences, not live machine or resident tracking.
+4. **Leaderboards:** compare the Stinky Squad user board and Dorm Wars synthetic hall averages. Point out recency/consistency and the explicit participating-sample denominator, not official residence-hall capacity.
+5. **Community/proof:** demonstrate the available local-only proof concept and synthetic feed. A chosen image is not provider verification and does not prove weight, clothing presence, machine activity, or cycle completion.
 
-Open the mobile landing page.
+Close: “LaundroStat makes laundry a social routine: find your Wash Mate, encourage a friend, and bring your hall along.”
 
-> LaundroStat turns laundry into a hall competition, but paying more never buys points. Each participant can help their hall once per week.
+## Honest limits
 
-Show Maple, River, and Oak as percentages with credited/eligible counts—not load totals.
-
-## 0:15–0:35 — Honest dashboard
-
-Open **View synthetic demo** as Maya Quest. Show:
-
-- self-reported and simulated source labels;
-- last recorded qualifying wash;
-- tracking freshness;
-- current weekly credit.
-
-State that live CSC access is not claimed. The CSC adapter is deliberately disabled until an approved contract exists.
-
-## 0:35–1:00 — Search is the interaction
-
-Use the preset **Friends · 14 days**. Show only accepted, opted-in friends with current tracking. Open **Why these results?** and point out the relationship, tracking, and cutoff rules. A stale synthetic participant must be absent.
-
-## 1:00–1:15 — Controlled encouragement
-
-Send:
-
-> Laundry quest this week? You've got this.
-
-The button changes to a 72-hour cooldown state. Mention mute, block, report, and the lack of any public inactivity list.
-
-## 1:15–1:40 — Import, dedupe, and anti-waste
-
-Import `fixtures/demo-activities.csv`. Preview one accepted washer row, a duplicate, and a refunded row. Confirm that only the qualifying new washer can score.
-
-Record another washer session. Show:
-
-> Recorded, but this week's participation credit is already earned.
-
-## 1:40–1:52 — Hall result
-
-Return to the leaderboard. Show Maple's normalized percentage and credited/eligible counts. Search or sort the hall results through the Typesense-backed preset when local services are connected.
-
-## 1:52–2:00 — Consent proof
-
-Open Maya's public preview. Disable public sharing. Confirm the public route/search result is denied immediately from authoritative policy even if an index deletion is queued.
-
-Close:
-
-> Search creates the social moment, one capped weekly action keeps it sustainable, and every public field is voluntary.
-
-## Rehearsal gate
-
-- Run once at 375×667 and once on desktop.
-- Start from a clean seeded state.
-- Keep natural-language search disabled; preset filters are the deterministic path.
-- If Supabase or Typesense is unavailable, show the explicit unavailable state. Never silently substitute unlabeled local results.
+- Every person, score, relationship, schedule, and standing is synthetic.
+- CSC/payment, machine-code, weight, removal-time, photo-proof, and refund/error checks are simulated.
+- The guest search is a labeled local demonstration, not proof of live Typesense or CSC connectivity.
+- No real student data is collected, no account is created, and no encouragement reaches a real person.
+- The earlier weekly-credit game is not the current demo. Old demo links redirect when the showcase flag is enabled.

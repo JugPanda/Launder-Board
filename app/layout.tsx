@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LaundroStat — weekly laundry challenge",
+  title: "LaundroStat — Clean-O-Meter & Dorm Wars",
   description:
-    "A Purdue West Lafayette-focused student hackathon project: voluntary weekly laundry participation without rewarding extra loads. Not affiliated with Purdue.",
+    "Check your Clean-O-Meter, find a Wash Mate, and explore Dorm Wars. A sign-in-free synthetic student project, not affiliated with Purdue.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

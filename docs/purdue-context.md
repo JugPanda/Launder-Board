@@ -25,6 +25,6 @@ The [official laundry page](https://www.housing.purdue.edu/my-housing/info/ameni
 
 ## Privacy and launch constraints
 
-One washer credit per voluntary enrolled participant/week; locked roster denominator; no points for spending, dryers, additional cycles, or claimed load size. No public inactivity rankings, PUIDs, rooms, exact machine locations, or fake provider confirmation. CSC/CSCPay live access remains disabled pending written authorization and documented integration.
+The current guest demo uses recency/consistency, not weekly credits. Hall averages use a disclosed synthetic participating sample, never building capacity; no points for spending, additional cycles, or claimed load size. No public inactivity rankings, PUIDs, rooms, exact machine locations, or fake provider confirmation. CSC/CSCPay live access remains disabled pending written authorization and documented integration.
 
 The existing synthetic UI demonstrates behavior; browser-only actions are not evidence of persisted account workflows. Hosted auth needs a real Supabase project, configuration, migrations and end-to-end verification. See [Supabase setup](supabase-setup.md). Neither a successful build nor a mock-based policy test constitutes production-auth readiness.
