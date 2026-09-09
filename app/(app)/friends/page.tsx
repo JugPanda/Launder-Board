@@ -87,7 +87,7 @@ export default function FriendsPage() {
               <div className="mb-4">
                 <p className="font-black">Noah R.</p>
                 <p className="mt-1 text-sm font-bold text-slate-700">No recorded wash in the last 14 days.</p>
-                <p className="mt-1 text-xs text-slate-500">Based on activity shared with Launder Board. Accepted friend.</p>
+                <p className="mt-1 text-xs text-slate-500">Based on activity shared with LaundroStat. Accepted friend.</p>
               </div>
               <EncourageButton demoMode recipientId={NOAH_ID} recipientName="Noah R." />
             </article>

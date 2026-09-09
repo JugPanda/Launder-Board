@@ -43,7 +43,7 @@ export function TrackingState({ state, detail, className = "" }: TrackingStatePr
     >
       <p className="font-semibold">{copy.label}</p>
       <p className="mt-1 text-sm">{detail ?? copy.detail}</p>
-      <p className="mt-2 text-xs opacity-80">Based on activity shared with Launder Board.</p>
+      <p className="mt-2 text-xs opacity-80">Based on activity shared with LaundroStat.</p>
     </div>
   );
 }

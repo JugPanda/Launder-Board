@@ -69,7 +69,7 @@ export const DEMO_PROFILE = Object.freeze({
   tracking: Object.freeze({
     state: "Current",
     detail: "Last shared activity: Tuesday evening",
-    disclosure: "Based on activity shared with Launder Board.",
+    disclosure: "Based on activity shared with LaundroStat.",
   }),
 });
 

@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 sm:px-8 lg:px-12">
       <nav className="flex min-h-11 items-center justify-between" aria-label="Primary navigation">
-        <span className="text-xl font-black tracking-[-0.04em] text-accent">Launder Board</span>
+        <span className="text-xl font-black tracking-[-0.04em] text-accent">LaundroStat</span>
         <a
           className="inline-flex min-h-11 items-center rounded-full border border-line bg-surface px-5 text-sm font-bold transition-colors hover:border-accent hover:text-accent motion-reduce:transition-none"
           href="#how-it-works"

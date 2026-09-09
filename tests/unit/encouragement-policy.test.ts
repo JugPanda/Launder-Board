@@ -233,7 +233,7 @@ describe("encouragement service", () => {
         displayName: "Noah R.",
         reason: "accepted_friend",
         reminderText: "No recorded wash in the last 14 days.",
-        context: "Based on activity shared with Launder Board.",
+        context: "Based on activity shared with LaundroStat.",
       },
     ]);
   });

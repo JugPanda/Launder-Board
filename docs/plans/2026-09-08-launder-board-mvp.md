@@ -1,4 +1,4 @@
-# Launder Board MVP Implementation Plan
+# LaundroStat MVP Implementation Plan
 
 > **For Hermes:** Use subagent-driven-development to implement this plan task-by-task only after the team approves the pre-implementation decisions.
 
@@ -18,7 +18,7 @@
 
 Build **one weekly participation competition** with three complete loops:
 
-1. **Record:** A participant manually logs a washer session or imports the Launder Board CSV template. Every activity displays `Self-reported`, `User-supplied record`, `Simulated CSC demo`, or future `Provider-confirmed` provenance. The demo imports clearly synthetic records through the same adapter contract intended for an approved CSC integration.
+1. **Record:** A participant manually logs a washer session or imports the LaundroStat CSV template. Every activity displays `Self-reported`, `User-supplied record`, `Simulated CSC demo`, or future `Provider-confirmed` provenance. The demo imports clearly synthetic records through the same adapter contract intended for an approved CSC integration.
 2. **Encourage:** A participant searches only accepted friends whose tracking is current, who opted into reminders, and whose recorded-wash anchor is older than the selected cutoff. Results say **“No recorded wash in 14 days”**, never “has not washed.” One tap sends a friendly preset message subject to cooldown, block, and recipient controls.
 3. **Compete:** Each eligible participant contributes at most **one participation credit per seven-day competition week**, regardless of number, price, or size of loads. A hall’s score is the percentage of its locked eligible roster earning that credit. Extra loads cannot buy extra points.
 
@@ -53,7 +53,7 @@ Typesense is central to participant lookup, due-reminder search, autocomplete, f
 - Typesense: the team has a Typesense Cloud cluster or sponsor-provided equivalent; local development can use a pinned Docker image.
 - Natural-language search: optional enhancement, not required for the core demo. Preset searches and filter chips remain deterministic.
 - Notifications: in-app only for MVP. Email, SMS, and push are deferred.
-- Payments: Launder Board never processes laundry payments and never sells points.
+- Payments: LaundroStat never processes laundry payments and never sells points.
 
 ---
 
@@ -70,20 +70,20 @@ Do not treat the products, accounts, data formats, or integration paths as inter
 | Capability or field | Status | Evidence / limitation | Dependency | MVP fallback |
 |---|---|---|---|---|
 | CSCPay Mobile starts washer/dryer | Confirmed user-facing capability | Official listing says the app pays for cycles, uses Bluetooth, and starts washers/dryers after scanning a machine QR code [CSC-2] | Participating CSCPay room and user account | Manual washer-session entry |
-| CSCPay Mobile transaction history | Confirmed in-app viewing | Official listing says a “full accounting” is available to see transaction purchase history [CSC-2] | User’s own app account | User transcribes an entry or imports Launder Board template |
+| CSCPay Mobile transaction history | Confirmed in-app viewing | Official listing says a “full accounting” is available to see transaction purchase history [CSC-2] | User’s own app account | User transcribes an entry or imports LaundroStat template |
 | CSC GO starts washer/dryer | Confirmed user-facing capability | Official listing states QR/NFC machine start and wash/dry payment [CSC-3] | Participating CSC GO room and user account | Manual entry |
 | CSC GO payment/transaction history | Confirmed in-app viewing | Official listing says users can view payment and transaction history [CSC-3]; help describes Wallet → Payment History [CSC-4] | User’s own app account | User-supplied record/template |
 | Machine availability and completion alerts | Confirmed current user-facing feature | CSC advertises availability, load status, and cycle-complete notifications [CSC-3][CSC-5] | Participating room and functioning app | Demo activity status is imported/manual, not live telemetry |
 | Public developer API | **Not confirmed** | No official public CSCPay/CSC GO developer documentation was found. Marketing “integration” material concerns property-management systems, not user-authorized laundry history [CSC-6] | Written CSC contract/documentation | Disabled CSC adapter |
-| OAuth/user authorization flow | **Not confirmed** | No official OAuth scope, authorization URL, token lifecycle, or consent contract was found | CSC cooperation | Launder Board account consent applies only to Launder Board/manual files |
+| OAuth/user authorization flow | **Not confirmed** | No official OAuth scope, authorization URL, token lifecycle, or consent contract was found | CSC cooperation | LaundroStat account consent applies only to LaundroStat/manual files |
 | Webhooks or incremental sync cursor | **Not confirmed** | No official webhook/event contract found | CSC cooperation | Idempotent file/manual adapters and an adapter interface |
-| User-downloadable CSV/JSON export | **Not confirmed** | In-app history is confirmed, but no product export format was found | CSC product support or privacy request outcome | Launder Board CSV template; do not claim it came from CSC |
+| User-downloadable CSV/JSON export | **Not confirmed** | In-app history is confirmed, but no product export format was found | CSC product support or privacy request outcome | LaundroStat CSV template; do not claim it came from CSC |
 | Privacy data-access request | Confirmed as a possible legal/privacy right, not an API | CSC says users may request specific personal information and provides a privacy request channel [CSC-7]. This is not guaranteed real-time or machine-readable integration access | CSC identity verification and applicable law | Not used in the live demo |
-| Transaction identifier | **Unknown** | Official user materials reviewed do not specify an exportable transaction ID | CSC schema/approved sample | Internal Launder Board UUID; optional provider external ID only when supplied |
+| Transaction identifier | **Unknown** | Official user materials reviewed do not specify an exportable transaction ID | CSC schema/approved sample | Internal LaundroStat UUID; optional provider external ID only when supplied |
 | Transaction timestamp | Partially confirmed | Support asks for transaction date shown on an account statement [CSC-8], but exact time/precision in app history/export is unknown | Approved sample/export | Require user-entered `occurred_at`; label source |
 | Machine identifier | Partially confirmed | CSC confirms physical machine IDs and optional machine number for refund requests [CSC-1][CSC-9]; presence in transaction history is unknown | Approved sample/export | Optional user-entered identifier, salted hash at rest if retained |
 | Washer/dryer type | Current app action confirmed; history field unknown | Apps start a washer or dryer, but reviewed sources do not define exported history fields [CSC-2][CSC-3] | Approved sample/export | Required normalized `machine_kind` in manual/template input |
-| Cycle status/history | Current notification confirmed; historical field unknown | Completion alerts/status exist, but no persisted event/webhook contract is published [CSC-5] | CSC contract | `reported`, `accepted`, `failed`, `refunded`, `retracted` Launder Board states |
+| Cycle status/history | Current notification confirmed; historical field unknown | Completion alerts/status exist, but no persisted event/webhook contract is published [CSC-5] | CSC contract | `reported`, `accepted`, `failed`, `refunded`, `retracted` LaundroStat states |
 | Laundry-room/location association | Current app capability confirmed; transaction field unknown | CSC GO can find/select a laundry room [CSC-3]; transaction-level location export is not documented | Approved sample/export and university mapping | User’s enrolled hall; do not retain exact room/machine location publicly |
 | Actual load weight or volume | **Not confirmed** | Official materials describe payment, machine monitoring, status, usage, revenue, and service performance—not measured clothes weight/volume [CSC-10] | Specific machine hardware telemetry and CSC/university authorization | Scoring independent of load size |
 | Property/university operational reporting | Confirmed for managers, not students | CSC says managers can access usage, revenue, and service performance and can receive customized reporting [CSC-10] | CSC + university/property contract and privacy review | Synthetic normalized feed |
@@ -197,7 +197,7 @@ The disabled CSC adapter must return a deliberate `provider_not_configured` resu
 Use:
 
 - “No recorded wash in the last 14 days.”
-- “Based on activity shared with Launder Board.”
+- “Based on activity shared with LaundroStat.”
 - “Tracking is incomplete; reminder status unavailable.”
 - “Simulated CSC-format demo record.”
 - “Provider-confirmed transaction” only after an approved integration provides that evidence.
@@ -254,7 +254,7 @@ Tradeoffs:
 
 ### 5.3 Eligibility and enrollment
 
-- User must voluntarily join Launder Board and the competition.
+- User must voluntarily join LaundroStat and the competition.
 - Hall must be selected through an organizer-controlled invite in MVP.
 - Competition enrollment closes at the weekly boundary; hall/eligibility is snapshotted for that week.
 - Hall changes apply next week after organizer review.
@@ -660,7 +660,7 @@ Autocomplete uses this same authorized filter; it never queries a broader collec
 
 ### 8.6 Optional natural-language search
 
-Typesense 30.x documents built-in natural-language query translation. Explicit application filters are combined with generated filters using `AND` [TS-5]. The same documentation states that initial prompt generation runs facet queries over the collection schema/data. It does not establish that this prompt-generation step is partitioned by Launder Board's dynamic friend ACL. Therefore, do **not** enable built-in NLS on the private participant collection for the MVP.
+Typesense 30.x documents built-in natural-language query translation. Explicit application filters are combined with generated filters using `AND` [TS-5]. The same documentation states that initial prompt generation runs facet queries over the collection schema/data. It does not establish that this prompt-generation step is partitioned by LaundroStat's dynamic friend ACL. Therefore, do **not** enable built-in NLS on the private participant collection for the MVP.
 
 The UI may still accept four demonstrated phrases:
 
@@ -706,7 +706,7 @@ Typesense multi-search can fetch separate participant and hall result lanes in o
 
 Require separate, revocable consent for:
 
-1. Launder Board account and competition participation;
+1. LaundroStat account and competition participation;
 2. importing activity from a provider or uploaded record;
 3. directory discovery;
 4. reminders/encouragement and allowed audience;
@@ -760,7 +760,7 @@ Controls:
 
 ### 10.1 Visual direction
 
-Playful competitive identity: the two-word title case `Launder Board`, arcade-inspired score accents, laundry-machine circular motifs, and concise quest language. Keep body typography conventional and readable. Use WCAG AA contrast, visible focus rings, 44px touch targets, semantic headings, reduced-motion support, and non-color status labels.
+Playful competitive identity: the exact capitalization `LaundroStat`, arcade-inspired score accents, laundry-machine circular motifs, and concise quest language. Keep body typography conventional and readable. Use WCAG AA contrast, visible focus rings, 44px touch targets, semantic headings, reduced-motion support, and non-color status labels.
 
 Use source badges consistently:
 
@@ -1050,7 +1050,7 @@ Use 18 synthetic participants in fictional Maple, River, and Oak halls. Put a vi
 
 Open the mobile landing page:
 
-> “Launder Board turns laundry into a hall competition—but paying more never buys points. Each participant can help their hall once per week.”
+> “LaundroStat turns laundry into a hall competition—but paying more never buys points. Each participant can help their hall once per week.”
 
 Show Maple 67%, River 50%, Oak 33%, with counts such as 4/6 rather than raw load totals.
 

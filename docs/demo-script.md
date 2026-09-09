@@ -1,4 +1,4 @@
-# Two-minute Launder Board demo
+# Two-minute LaundroStat demo
 
 Use only bundled synthetic fixtures. Keep the **Synthetic demo** banner visible throughout.
 
@@ -6,7 +6,7 @@ Use only bundled synthetic fixtures. Keep the **Synthetic demo** banner visible 
 
 Open the mobile landing page.
 
-> Launder Board turns laundry into a hall competition, but paying more never buys points. Each participant can help their hall once per week.
+> LaundroStat turns laundry into a hall competition, but paying more never buys points. Each participant can help their hall once per week.
 
 Show Maple, River, and Oak as percentages with credited/eligible counts—not load totals.
 

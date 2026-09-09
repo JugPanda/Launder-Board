@@ -1,4 +1,4 @@
-# Launder Board MVP product rules
+# LaundroStat MVP product rules
 
 This document is normative for the hackathon MVP.
 
@@ -66,7 +66,7 @@ Uploaded files are private, deleted synchronously after successful normalization
 Use:
 
 - “No recorded wash in the last 14 days.”
-- “Based on activity shared with Launder Board.”
+- “Based on activity shared with LaundroStat.”
 - “Tracking is incomplete; reminder status unavailable.”
 - “Simulated CSC-format demo record.”
 
