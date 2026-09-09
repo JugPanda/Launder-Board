@@ -17,12 +17,14 @@ test("guest demo is responsive and contains no weekly-cap game", async ({ page }
   expect(errors).toEqual([]);
 });
 
-test("guest route never opens real APIs or submits account details", async ({ page }) => {
+test("guest route only opens its scoped demo session, never collects account details", async ({ page }) => {
   const writes: string[] = [];
   page.on("request", request => { if (request.method() !== "GET" && request.url().includes("/api/")) writes.push(request.url()); });
   await page.goto("/demo");
   await expect(page.locator('input[type="password"],input[type="email"]')).toHaveCount(0);
-  expect(writes).toEqual([]);
+  await expect(page.getByLabel("Synthetic profile preview")).toBeVisible();
+  expect(writes.length).toBeGreaterThan(0);
+  expect(writes.every(url => new URL(url).pathname === "/api/demo/session")).toBe(true);
 });
 
 test("old guest entry points route to the current product", async ({ page }) => {

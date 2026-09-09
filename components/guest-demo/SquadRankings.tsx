@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { GUEST_PARTICIPANTS } from "@/lib/guest-demo";
+import { cleanScore, type GuestParticipant } from "@/lib/guest-demo";
 import { getLaundryStatus, getSquadRankings, LAUNDRY_STATUSES, type SquadPlayer } from "@/lib/squad-rankings";
 import styles from "./SquadRankings.module.css";
 
@@ -28,8 +28,8 @@ function Squad({ name, subtitle, people, tone }: { name: string; subtitle: strin
   </section>;
 }
 
-export function SquadRankings() {
-  const { squeaky, stinky } = getSquadRankings(GUEST_PARTICIPANTS);
+export function SquadRankings({ participants }: { participants: readonly GuestParticipant[] }) {
+  const { squeaky, stinky } = getSquadRankings(participants.map((person) => ({ ...person, score: cleanScore(person.daysSinceWash, person.scrubStreak) })));
   return <div className={styles.wrapper}>
     <div className={styles.heading}><p>THE TWO SIDES OF LAUNDRY DAY</p><h2>Two squads. Same friendly competition.</h2><span>Highest and lowest Clean-O-Meter scores from the eligible synthetic cohort. Recency and consistency—not more loads. Private and unknown profiles stay out.</span></div>
     <div className={styles.grid}>

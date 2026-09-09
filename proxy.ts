@@ -46,6 +46,9 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   // Guest demo contains only synthetic fixtures and never initializes authentication.
   if (pathname === "/demo") return applyNoStore(response);
+  // These guest handlers enforce their own session/origin or admin-key checks.
+  const hostedDemoPaths = ["/api/demo/session", "/api/demo/bootstrap", "/api/demo/search", "/api/demo/nudges", "/api/demo/posts", "/api/demo/reset", "/api/demo/index"];
+  if (hostedDemoPaths.includes(pathname)) return applyNoStore(response);
   const guestRelease = process.env.LAUNDER_BOARD_DEMO_MODE === "enabled";
   const archivedDemo = DEMO_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix.endsWith("/") ? prefix : prefix + "/"));
   if (guestRelease && request.method === "GET" && (pathname === "/sign-in" || pathname === "/onboarding" || archivedDemo || pathname.startsWith("/leaderboards/") || pathname.startsWith("/p/"))) {

@@ -146,11 +146,11 @@ export type GuestSearchResult = Pick<GuestParticipant, 'id' | 'name' | 'hall' | 
 };
 
 /** Default: two-week reminder cohort. All filters operate only on this fixed synthetic roster. */
-export function searchGuestParticipants({ query = '', hall = '', minDays = 14 }: GuestSearchFilters = {}): GuestSearchResult[] {
+export function searchGuestParticipants({ query = '', hall = '', minDays = 14 }: GuestSearchFilters = {}, participants: readonly GuestParticipant[] = GUEST_PARTICIPANTS): GuestSearchResult[] {
   nonnegative(minDays, 'minDays');
   const needle = query.trim().toLowerCase();
   const hallFilter = hall.trim().toLowerCase();
-  return GUEST_PARTICIPANTS.flatMap((p): GuestSearchResult[] => {
+  return participants.flatMap((p): GuestSearchResult[] => {
     if (p.visibility === 'private' || p.tracking !== 'current' || p.daysSinceWash === null || p.reminderConsent !== 'demo-assumed') return [];
     if (p.daysSinceWash < minDays) return [];
     if (hallFilter && hallFilter !== 'all' && p.hall.toLowerCase() !== hallFilter) return [];
@@ -183,13 +183,13 @@ function clock(minutes: number): string {
 }
 
 /** Actual day/time overlap on generated consenting fixtures; no messages or persistence. */
-export function matchWashMates({ days, timeWindow }: WashMateFilters): WashMateResult[] {
+export function matchWashMates({ days, timeWindow }: WashMateFilters, participants: readonly GuestParticipant[] = GUEST_PARTICIPANTS): WashMateResult[] {
   const [start, end] = timeRange(timeWindow);
   const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const requested = new Set(days.map(day => day.trim().toLowerCase()));
   if ([...requested].some(day => !weekdays.includes(day))) throw new RangeError('Use full weekday names');
-  return searchGuestParticipants({ minDays: 0 }).flatMap(p => {
-    const fixture = GUEST_PARTICIPANTS.find(candidate => candidate.id === p.id)!;
+  return searchGuestParticipants({ minDays: 0 }, participants).flatMap(p => {
+    const fixture = participants.find(candidate => candidate.id === p.id)!;
     const sharedDays = fixture.usualDays.filter(day => requested.has(day.toLowerCase()));
     const [otherStart, otherEnd] = timeRange(fixture.usualTimeWindow);
     const overlapStart = Math.max(start, otherStart), overlapEnd = Math.min(end, otherEnd);
