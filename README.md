@@ -1,6 +1,6 @@
 # LaundroStat
 
-A sign-in-free, synthetic laundry social demo for Purdue University West Lafayette: **Clean-O-Meter, consenting-friend search, Wash Mate matching, Stinky Squad, and Dorm Wars**.
+A sign-in-free, synthetic laundry social demo for Purdue University West Lafayette: **Clean-O-Meter, consenting-friend search, Wash Mate matching, Squeaky Squad / Stinky Squad, and Dorm Wars**.
 
 **Live:** https://launderboard.vercel.app · **Demo:** https://launderboard.vercel.app/demo
 

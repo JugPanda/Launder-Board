@@ -5,7 +5,7 @@ const features = [
   { icon: Sparkles, title: "Your Clean-O-Meter", text: "See your last recorded full cycle, days since wash, scrub streak, and the source behind every update." },
   { icon: Search, title: "A little friendly accountability", text: "Find consenting friends with no recorded wash in your chosen period. Send encouragement, not assumptions." },
   { icon: Users, title: "Find your Wash Mate", text: "Match usual laundry days and time windows. A shared routine starts with an overlapping schedule." },
-  { icon: Trophy, title: "Bring on Dorm Wars", text: "Compare synthetic hall averages and the Stinky Squad board using recency and consistency—not extra loads." },
+  { icon: Trophy, title: "Bring on Dorm Wars", text: "Compare synthetic hall averages and the Squeaky Squad and Stinky Squad boards using recency and consistency—not extra loads." },
 ];
 
 export default function HomePage() {

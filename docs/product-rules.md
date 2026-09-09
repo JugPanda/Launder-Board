@@ -12,7 +12,7 @@ Current source brief: https://docs.google.com/document/d/17KNrH98GEM0szQTWxbTPI2
 - Show Clean-O-Meter, last recorded completed cycle, days since wash, scrub streak, and source credibility.
 - Search a consenting synthetic friend group by name, residence hall, and days without a recorded completed wash.
 - Match Wash Mates by overlapping usual laundry days and time windows. These are synthetic coarse schedules, not observed location data.
-- Show the playful Stinky Squad user board and Dorm Wars hall averages using recency/consistency, never load count or weekly credits.
+- Show the playful Squeaky Squad / Stinky Squad user board and Dorm Wars hall averages using recency/consistency, never load count or weekly credits.
 - Community updates and proof concepts are browser-only simulations. No messages or photographs are uploaded to a provider.
 - The exact Clean-O-Meter formula and invented streak/schedule examples must be labeled as demonstration assumptions, not clinically meaningful hygiene measurements.
 - Unknown or incomplete tracking is not ranked or treated as due.
@@ -20,7 +20,7 @@ Current source brief: https://docs.google.com/document/d/17KNrH98GEM0szQTWxbTPI2
 
 ## Consent and truthfulness
 
-Every person, score, schedule, friendship, and activity is synthetic. Public display does not imply reminder consent. The fictional viewer's friend/reminder consent is an explicit scenario assumption. Private fixtures remain absent from search and user leaderboards. Use “No recorded wash,” not a claim that someone has not washed. The requested Stinky Squad label is playful game branding, not a factual judgment about a person.
+Every person, score, schedule, friendship, and activity is synthetic. Public display does not imply reminder consent. The fictional viewer's friend/reminder consent is an explicit scenario assumption. Private fixtures remain absent from search and user leaderboards. Use “No recorded wash,” not a claim that someone has not washed. The requested Squeaky Squad / Stinky Squad label is playful game branding, not a factual judgment about a person.
 
 CSC/payment, machine-code, weight, removal-time, photo-proof, and refund/error checks are **simulated**. No live CSC/CSCPay access, measured weight, actual cycle completion, real photo verification, or university verification is claimed. Do not request provider passwords or import real student data. Do not attach money, housing privileges, or discipline to standings.
 
